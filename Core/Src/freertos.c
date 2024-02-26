@@ -29,8 +29,10 @@
 #include "minibot_config.h"
 #include "outputs.h"
 #include "inputs.h"
-#include "stepper_control.h"
+#include "servo_control.h"
 #include "uart_wifi.h"
+#include "canbus.h"
+#include "drivers_control.h"
 
 /* USER CODE END Includes */
 
@@ -52,6 +54,9 @@ typedef StaticTask_t osStaticThreadDef_t;
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
+
+GlobDataTypeDef globData;
+MinibotConfigTypeDef minibotConfig;
 
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
@@ -241,7 +246,7 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    osDelay(1000);
   }
   /* USER CODE END StartDefaultTask */
 }

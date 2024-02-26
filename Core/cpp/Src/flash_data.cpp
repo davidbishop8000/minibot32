@@ -7,7 +7,7 @@
 
 #include "flash_data.h"
 
-uint32_t flashWriteData(TermoplastConfigTypeDef *configData)
+uint32_t flashWriteData(MinibotConfigTypeDef *configData)
 {
 	static FLASH_EraseInitTypeDef EraseInitStruct;
 	EraseInitStruct.TypeErase = FLASH_TYPEERASE_SECTORS;
@@ -23,7 +23,7 @@ uint32_t flashWriteData(TermoplastConfigTypeDef *configData)
 		return er;
 	}
 	osDelay(20);
-	for (int i = 0; i < sizeof(*configData)/4; i++) {
+	for (uint32_t i = 0; i < sizeof(*configData)/4; i++) {
 		if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, Address, *(((uint32_t*)configData)+i)) != HAL_OK)
 		{
 			uint32_t er = HAL_FLASH_GetError();
@@ -37,10 +37,10 @@ uint32_t flashWriteData(TermoplastConfigTypeDef *configData)
 	HAL_FLASH_Lock();
 	return 0;
 }
-uint32_t flashReadData(TermoplastConfigTypeDef *configData)
+uint32_t flashReadData(MinibotConfigTypeDef *configData)
 {
 	uint32_t Address = START_ADDR;
-	for (int i = 0; i < sizeof(*configData)/4; i++) {
+	for (uint32_t i = 0; i < sizeof(*configData)/4; i++) {
 		*(((uint32_t*)configData)+i) = *(uint32_t*)Address;
 		Address += 4;
 	}

@@ -60,14 +60,14 @@ typedef struct {
 	uint8_t reservU0;
 	uint8_t flash_init;
 	uint8_t CS;
-} TermoplastConfigTypeDef;
+} MinibotConfigTypeDef;
 
 typedef struct {
 	uint8_t start_msg0;
 	uint8_t start_msg1;
 	uint8_t control_id;
 	uint8_t msg_id;
-	TermoplastConfigTypeDef termConfig;
+	MinibotConfigTypeDef termConfig;
 	uint8_t reservU0;
 	uint8_t reservU1;
 	uint8_t reservU2;

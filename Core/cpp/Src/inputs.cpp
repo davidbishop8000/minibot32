@@ -5,10 +5,10 @@
  *      Author: USER
  */
 
-#include <inputs.h>
-#include "termoplast_config.h"
+#include "inputs.h"
+#include "minibot_config.h"
 extern GlobDataTypeDef globData;
-extern TermoplastConfigTypeDef termoplastConfig;
+extern MinibotConfigTypeDef minibotConfig;
 
 void StartInputsTask(void *argument)
 {
@@ -80,8 +80,8 @@ void InputsRead() {
 		else if (globData.sens.button_motor1_back && button_trig == 0)
 		{
 			button_trig = 1;
-			globData.volume = termoplastConfig.volume;
-			globData.time_hold = termoplastConfig.time_hold;
+			globData.volume = minibotConfig.volume;
+			globData.time_hold = minibotConfig.time_hold;
 			globData.heat_on = 1;
 			globData.current_status = JOB_START;
 			osDelay(5);

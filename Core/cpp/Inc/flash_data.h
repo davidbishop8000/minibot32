@@ -15,7 +15,7 @@ extern "C"
 
 #include "main.h"
 #include "cmsis_os2.h"
-#include "termoplast_config.h"
+#include "minibot_config.h"
 
 #define ADDR_FLASH_SECTOR_0     ((uint32_t)0x08000000) /* Base @ of Sector 0, 16 Kbytes */
 #define ADDR_FLASH_SECTOR_1     ((uint32_t)0x08004000) /* Base @ of Sector 1, 16 Kbytes */
@@ -33,8 +33,8 @@ extern "C"
 #define START_ADDR ADDR_FLASH_SECTOR_7
 #define END_ADDR     START_ADDR  +  GetSectorSize(ADDR_FLASH_SECTOR_7) -1
 
-uint32_t flashWriteData(TermoplastConfigTypeDef *configData);
-uint32_t flashReadData(TermoplastConfigTypeDef *configData);
+uint32_t flashWriteData(MinibotConfigTypeDef *configData);
+uint32_t flashReadData(MinibotConfigTypeDef *configData);
 uint32_t GetSectorSize(uint32_t Sector);
 
 #ifdef __cplusplus

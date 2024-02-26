@@ -16,7 +16,7 @@ extern "C"
 #include "main.h"
 #include "cmsis_os2.h"
 #include "usart.h"
-#include <termoplast_config.h>
+#include "minibot_config.h"
 
 #define RECEV_MSG_CS_BYTE_NUM 7
 

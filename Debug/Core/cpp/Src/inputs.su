@@ -1,0 +1,2 @@
+../Core/cpp/Src/inputs.cpp:13:6:void StartInputsTask(void*)	16	static
+../Core/cpp/Src/inputs.cpp:22:6:void InputsRead()	8	static

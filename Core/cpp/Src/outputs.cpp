@@ -6,13 +6,13 @@
  */
 
 
-#include <outputs.h>
-#include "termoplast_config.h"
+#include "outputs.h"
+#include "minibot_config.h"
 
 
 extern IWDG_HandleTypeDef hiwdg;
 extern GlobDataTypeDef globData;
-extern TermoplastConfigTypeDef termoplastConfig;
+extern MinibotConfigTypeDef minibotConfig;
 
 //extern IWDG_HandleTypeDef hiwdg;
 
@@ -31,18 +31,7 @@ void StartOutputsTask(void *argument)
 void SetOutputs()
 {
 	static int manual_mode_trig = 0;
-	if (globData.heat_on)
-	{
-		((globData.temp1 > MAX_TEMP) || (globData.temp1 > termoplastConfig.temp1)) ? Y00_OFF : Y00_ON;
-		((globData.temp2 > MAX_TEMP) || (globData.temp2 > termoplastConfig.temp2)) ? Y01_OFF : Y01_ON;
-		((globData.temp3 > MAX_TEMP) || (globData.temp3 > termoplastConfig.temp3)) ? Y02_OFF : Y02_ON;
-	}
-	else
-	{
-		Y01_OFF;
-		Y02_OFF;
-		Y03_OFF;
-	}
+
 	if (globData.sens.button_manual_mode) {
 		manual_mode_trig = 1;
 		Y06_ON;

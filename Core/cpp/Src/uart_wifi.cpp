@@ -5,9 +5,9 @@
  *      Author: USER
  */
 
-#include <uart_wifi.h>
+#include "uart_wifi.h"
 #include <string.h>
-#include "termoplast_config.h"
+#include "minibot_config.h"
 #include "flash_data.h"
 
 //#include <stdio.h> //for test
@@ -16,7 +16,7 @@ extern UART_HandleTypeDef WIFI_UART;
 extern DMA_HandleTypeDef WIFI_UART_DMA;
 
 extern GlobDataTypeDef globData;
-extern TermoplastConfigTypeDef termoplastConfig;
+extern MinibotConfigTypeDef minibotConfig;
 uint8_t new_wifi_data = 0;
 uint8_t wifi_uart_buff[100];
 StatusMsgTypeDef statusMsg;
@@ -155,7 +155,7 @@ void GetSTMConfig()
 	stmConf.start_msg1 = START_MSG1;
 	stmConf.control_id = WIFI_CONTROL_ID;
 	stmConf.msg_id = WIFI_GET_STM_CONFIG;
-	stmConf.termConfig = termoplastConfig;
+	stmConf.termConfig = minibotConfig;
 	stmConf.CS = calculateCS((uint8_t *)&stmConf, sizeof(StmConfigTypeDef)-1);
 	HAL_UART_Transmit(&WIFI_UART, (uint8_t*)&stmConf, sizeof(StmConfigTypeDef), 100);
 }
@@ -171,23 +171,23 @@ uint8_t calculateCS(uint8_t *msg, int msg_size) {
 
 void ConfigInit()
 {
-	flashReadData(&termoplastConfig);
-	if (termoplastConfig.flash_init != FLASH_INIT)
+	flashReadData(&minibotConfig);
+	if (minibotConfig.flash_init != FLASH_INIT)
 	{
-		termoplastConfig.volume_per_rev = 100.0;
-		termoplastConfig.volume = 10.0;
-		termoplastConfig.motor1_speed = 1000;
-		termoplastConfig.motor1_acc = 500;
-		termoplastConfig.motor2_speed = 1000;
-		termoplastConfig.motor2_acc = 500;
-		termoplastConfig.time_hold = 10;
-		termoplastConfig.temp1 = 30.0;
-		termoplastConfig.temp2 = 30.0;
-		termoplastConfig.temp3 = 30.0;
-		termoplastConfig.Kp = 1.0;
-		termoplastConfig.Ki = 1.0;
-		termoplastConfig.Kd = 1.0;
-		termoplastConfig.bitParams.ind = 1;
+		minibotConfig.volume_per_rev = 100.0;
+		minibotConfig.volume = 10.0;
+		minibotConfig.motor1_speed = 1000;
+		minibotConfig.motor1_acc = 500;
+		minibotConfig.motor2_speed = 1000;
+		minibotConfig.motor2_acc = 500;
+		minibotConfig.time_hold = 10;
+		minibotConfig.temp1 = 30.0;
+		minibotConfig.temp2 = 30.0;
+		minibotConfig.temp3 = 30.0;
+		minibotConfig.Kp = 1.0;
+		minibotConfig.Ki = 1.0;
+		minibotConfig.Kd = 1.0;
+		minibotConfig.bitParams.ind = 1;
 	}
 }
 
@@ -195,61 +195,61 @@ int ConfigUpdate()
 {
 	int err = 0;
 	if (stmConf.termConfig.volume_per_rev > 0) {
-		termoplastConfig.volume_per_rev = stmConf.termConfig.volume_per_rev;
+		minibotConfig.volume_per_rev = stmConf.termConfig.volume_per_rev;
 	}
 	else err++;
 	if (stmConf.termConfig.volume > 0) {
-		termoplastConfig.volume = stmConf.termConfig.volume;
+		minibotConfig.volume = stmConf.termConfig.volume;
 	}
 	else err++;
 	if (stmConf.termConfig.motor1_speed > 0 && stmConf.termConfig.motor1_speed < 5000)
 	{
-		termoplastConfig.motor1_speed = stmConf.termConfig.motor1_speed;
+		minibotConfig.motor1_speed = stmConf.termConfig.motor1_speed;
 	}
 	else err++;
 	if (stmConf.termConfig.motor1_acc > 0 && stmConf.termConfig.motor1_acc < 5000)
 	{
-		termoplastConfig.motor1_acc= stmConf.termConfig.motor1_acc;
+		minibotConfig.motor1_acc= stmConf.termConfig.motor1_acc;
 	}
 	else err++;
 	if (stmConf.termConfig.motor2_speed > 0 && stmConf.termConfig.motor2_speed < 5000) {
-		termoplastConfig.motor2_speed = stmConf.termConfig.motor2_speed;
+		minibotConfig.motor2_speed = stmConf.termConfig.motor2_speed;
 	}
 	else err++;
 	if (stmConf.termConfig.motor2_acc > 0 && stmConf.termConfig.motor2_acc < 5000) {
-		termoplastConfig.motor2_acc = stmConf.termConfig.motor2_acc;
+		minibotConfig.motor2_acc = stmConf.termConfig.motor2_acc;
 	}
 	else err++;
 	if (stmConf.termConfig.motor2_acc > 0 && stmConf.termConfig.motor2_acc < 5000) {
-		termoplastConfig.motor2_acc = stmConf.termConfig.motor2_acc;
+		minibotConfig.motor2_acc = stmConf.termConfig.motor2_acc;
 	}
 	else err++;
 	if (stmConf.termConfig.time_hold > 0) {
-		termoplastConfig.time_hold = stmConf.termConfig.time_hold;
+		minibotConfig.time_hold = stmConf.termConfig.time_hold;
 	}
 	else err++;
 	if (stmConf.termConfig.temp1 > 0 && stmConf.termConfig.temp1 < 500) {
-		termoplastConfig.temp1 = stmConf.termConfig.temp1;
+		minibotConfig.temp1 = stmConf.termConfig.temp1;
 	}
 	else err++;
 	if (stmConf.termConfig.temp2 > 0 && stmConf.termConfig.temp2 < 500) {
-		termoplastConfig.temp2 = stmConf.termConfig.temp2;
+		minibotConfig.temp2 = stmConf.termConfig.temp2;
 	}
 	else err++;
 	if (stmConf.termConfig.temp3 > 0 && stmConf.termConfig.temp3 < 500) {
-		termoplastConfig.temp3 = stmConf.termConfig.temp3;
+		minibotConfig.temp3 = stmConf.termConfig.temp3;
 	}
 	else err++;
 	if (stmConf.termConfig.Kp > 0) {
-		termoplastConfig.Kp = stmConf.termConfig.Kp;
+		minibotConfig.Kp = stmConf.termConfig.Kp;
 	}
 	else err++;
 	if (stmConf.termConfig.Ki > 0) {
-		termoplastConfig.Ki = stmConf.termConfig.Ki;
+		minibotConfig.Ki = stmConf.termConfig.Ki;
 	}
 	else err++;
 	if (stmConf.termConfig.Kd > 0) {
-		termoplastConfig.Kd = stmConf.termConfig.Kd;
+		minibotConfig.Kd = stmConf.termConfig.Kd;
 	}
 	else err++;
 	if (err)
@@ -257,8 +257,8 @@ int ConfigUpdate()
 		globData.LEDB = LEDB_ERROR;
 		return err;
 	}
-	termoplastConfig.flash_init = FLASH_INIT;
-	flashWriteData(&termoplastConfig);
+	minibotConfig.flash_init = FLASH_INIT;
+	flashWriteData(&minibotConfig);
 	globData.LEDB = LEDB_FLASH_OK;
 	return 0;
 }
