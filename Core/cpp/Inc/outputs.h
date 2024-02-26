@@ -1,0 +1,129 @@
+/*
+ * outputs.hpp
+ *
+ *  Created on: May 5, 2023
+ *      Author: USER
+ */
+
+#ifndef CPP_INC_OUTPUTS_H_
+#define CPP_INC_OUTPUTS_H_
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+#include "main.h"
+#include "cmsis_os2.h"
+
+/*
+ * PA9 PA10 USART1 Tx Rx
+ * PA2 PA3 USART2 Tx Rx RS485
+ * PB10 PB11 USART3 Tx Rx
+ * PB8 PB9 CAN1 Rx Tx
+ *
+ * PC9 Pulse1
+ * PC8 Pulse2
+ * PC7 Pulse3
+ * PC6 Pulse4
+ * PD15 Dir1
+ * PD14 Dir2
+ * PD13 Dir3
+ * PD12 Dir4
+ *
+ * Output
+ * PA1	Y00
+ * PA4	Y01
+ * PA5	Y02
+ * PA6	Y03
+ * PA7	Y04
+ * PC4	Y05
+ * PC5	Y06
+ * PB0  Y07
+ *
+ * PB1  Y08
+ * PE7  Y09
+ * PE8  Y10
+ * PE9  Y11
+ * PE10 Y12
+ * PE11 Y13
+ * PE12 Y14
+ * PE13 Y15
+ *
+ * PE14 Y16
+ * PE15 Y17
+ * PC1  Y18
+ * PA8  Y19
+ * PD8  Y20
+ * PD9  Y21
+ * PD10 Y22
+ * PD11 Y23
+ *
+ */
+//#define Y00_ON GPIOA->ODR |= GPIO_ODR_ODR_1
+//#define Y08_OFF GPIOB->ODR &= ~GPIO_ODR_ODR_1
+
+#define Y00_OFF (GPIOA->BSRR = GPIO_BSRR_BS1)
+#define Y01_OFF (GPIOA->BSRR = GPIO_BSRR_BS4)
+#define Y02_OFF (GPIOA->BSRR = GPIO_BSRR_BS5)
+#define Y03_OFF (GPIOA->BSRR = GPIO_BSRR_BS6)
+#define Y04_OFF (GPIOA->BSRR = GPIO_BSRR_BS7)
+#define Y05_OFF (GPIOC->BSRR = GPIO_BSRR_BS4)
+#define Y06_OFF (GPIOC->BSRR = GPIO_BSRR_BS5)
+#define Y07_OFF (GPIOB->BSRR = GPIO_BSRR_BS0)
+
+#define Y08_OFF (GPIOB->BSRR = GPIO_BSRR_BS1)
+#define Y09_OFF (GPIOE->BSRR = GPIO_BSRR_BS7)
+#define Y10_OFF (GPIOE->BSRR = GPIO_BSRR_BS8)
+#define Y11_OFF (GPIOE->BSRR = GPIO_BSRR_BS9)
+#define Y12_OFF (GPIOE->BSRR = GPIO_BSRR_BS10)
+#define Y13_OFF (GPIOE->BSRR = GPIO_BSRR_BS11)
+#define Y14_OFF (GPIOE->BSRR = GPIO_BSRR_BS12)
+#define Y15_OFF (GPIOE->BSRR = GPIO_BSRR_BS13)
+
+#define Y16_OFF (GPIOE->BSRR = GPIO_BSRR_BS14)
+#define Y17_OFF (GPIOE->BSRR = GPIO_BSRR_BS15)
+#define Y18_OFF (GPIOC->BSRR = GPIO_BSRR_BS1)
+#define Y19_OFF (GPIOA->BSRR = GPIO_BSRR_BS8)
+#define Y20_OFF (GPIOD->BSRR = GPIO_BSRR_BS8)
+#define Y21_OFF (GPIOD->BSRR = GPIO_BSRR_BS9)
+#define Y22_OFF (GPIOD->BSRR = GPIO_BSRR_BS10)
+#define Y23_OFF (GPIOD->BSRR = GPIO_BSRR_BS11)
+
+#define Y00_ON (GPIOA->BSRR = GPIO_BSRR_BR1)
+#define Y01_ON (GPIOA->BSRR = GPIO_BSRR_BR4)
+#define Y02_ON (GPIOA->BSRR = GPIO_BSRR_BR5)
+#define Y03_ON (GPIOA->BSRR = GPIO_BSRR_BR6)
+#define Y04_ON (GPIOA->BSRR = GPIO_BSRR_BR7)
+#define Y05_ON (GPIOC->BSRR = GPIO_BSRR_BR4)
+#define Y06_ON (GPIOC->BSRR = GPIO_BSRR_BR5)
+#define Y07_ON (GPIOB->BSRR = GPIO_BSRR_BR0)
+
+#define Y08_ON (GPIOB->BSRR = GPIO_BSRR_BR1)
+#define Y09_ON (GPIOE->BSRR = GPIO_BSRR_BR7)
+#define Y10_ON (GPIOE->BSRR = GPIO_BSRR_BR8)
+#define Y11_ON (GPIOE->BSRR = GPIO_BSRR_BR9)
+#define Y12_ON (GPIOE->BSRR = GPIO_BSRR_BR10)
+#define Y13_ON (GPIOE->BSRR = GPIO_BSRR_BR11)
+#define Y14_ON (GPIOE->BSRR = GPIO_BSRR_BR12)
+#define Y15_ON (GPIOE->BSRR = GPIO_BSRR_BR13)
+
+#define Y16_ON (GPIOE->BSRR = GPIO_BSRR_BR14)
+#define Y17_ON (GPIOE->BSRR = GPIO_BSRR_BR15)
+#define Y18_ON (GPIOC->BSRR = GPIO_BSRR_BR1)
+#define Y19_ON (GPIOA->BSRR = GPIO_BSRR_BR8)
+#define Y20_ON (GPIOD->BSRR = GPIO_BSRR_BR8)
+#define Y21_ON (GPIOD->BSRR = GPIO_BSRR_BR9)
+#define Y22_ON (GPIOD->BSRR = GPIO_BSRR_BR10)
+#define Y23_ON (GPIOD->BSRR = GPIO_BSRR_BR11)
+
+void StartOutputsTask(void *argument);
+
+void SetOutputs();
+void LedBlink();
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* CPP_INC_OUTPUTS_H_ */
