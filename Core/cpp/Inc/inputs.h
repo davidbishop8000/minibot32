@@ -83,8 +83,6 @@ PA15    X23
 
 void StartInputsTask(void *argument);
 
-void InputsRead();
-
 #ifdef __cplusplus
 }
 #endif

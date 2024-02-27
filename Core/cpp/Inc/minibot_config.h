@@ -21,6 +21,28 @@ extern "C"
 #define WIFI_UART_DMA hdma_usart1_rx
 #define WIFI_UART_Ins USART1
 
+#define BMS_UART huart2
+#define BMS_UART_DMA hdma_usart2_rx
+#define BMS_UART_Ins USART2
+
+#define RC_UART huart3
+#define RC_UART_DMA  hdma_usart3_rx
+#define RC_UART_Ins USART3
+
+#define DEBUG_UART RC_UART
+#define DEBUG_UART_DMA RC_UART_DMA
+#define DEBUG_UART_Ins RC_UART_Ins
+
+#define DRIVER_LKTECH_INVERS 0
+#define DRIVER_KEYA_INVERS 0
+
+#define DRIVER1_LKTECH_ID 0x01
+#define DRIVER2_LKTECH_ID 0x02
+#define DRIVER3_LKTECH_ID 0x03
+#define DRIVER4_LKTECH_ID 0x04
+
+#define DRIVER_KEYA_ID 0x05
+
 #define FLASH_INIT 0x44
 
 ////////Control//////////
@@ -115,7 +137,8 @@ typedef struct {
 typedef struct {
 	uint8_t current_status;
 	uint8_t wifi_status;
-	uint8_t current_move_comm;
+	uint8_t current_move_driver;
+	uint8_t current_comm;
 	uint8_t cs_err;
 	uint8_t LEDB;
 	float temp1;
@@ -202,14 +225,35 @@ enum JOB_STATUS {
 	JOB_MAX,
 };
 
-enum MOVE_COME {
-	MOVE_STOP = 0,
-	MOVE_MOTOR1_FORW,
-	MOVE_MOTOR1_BACK,
-	MOVE_MOTOR2_FORW,
-	MOVE_MOTOR2_BACK,
+enum MOVE_COMM {
+	MOVE_ZERO = 0,
+	MOVE_MOTOR_FB,
+	MOVE_MOTOR_LR,
+	MOVE_FORK,
+	MOVE_SERVO,
 	MOVE_ERROR,
 	MOVE_MAX,
+};
+
+enum SERVO_COMM {
+	SERVO_ZERO = 0,
+	SERVO_FORW_OPEN,
+	SERVO_FORW_CLOSE,
+	SERVO_BACK_OPEN,
+	SERVO_BACK_CLOSE,
+	SERVO_ERROR,
+	SERVO_MAX,
+};
+
+enum BEEPER {
+	BEEP_POWER_ON = 1,
+	BEEP_SEARCH = 2,
+	BEEP_START,
+	BEEP_COMPLETED,
+	BEEP_WARNING,
+	BEEP_ERROR,
+	BEEP_FLASH_OK,
+	BEEP_MAX,
 };
 
 #ifdef __cplusplus

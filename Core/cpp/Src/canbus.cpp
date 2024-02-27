@@ -57,58 +57,9 @@ void StartCanTask(void *argument) {
 uint8_t CanMsgRead(CanDataRecvTypeDef *canDataRecv) {
 
 	NVIC_DisableIRQ(CAN1_RX0_IRQn);
+	/*//uint32_t drvId = DRIVER_MOVE_ID + 0x05800000;
 
-	/*uint32_t drvId = RxHeader.StdId >> 5;
-	uint32_t cmd_id;
-	float voltage;
-	if (drvId == DRIVER_MOVE_ID)
-	{
-		cmd_id = DRIVER_MOVE_ID << 5 ^ RxHeader.StdId;
-		switch(cmd_id) {
-		case MSG_ODRIVE_HEARTBEAT:
-			//HAL_UART_Transmit(&DEBUG_UART, (uint8_t*) "heart\r\n", 7, 100);
-			break;
-		case MSG_GET_MOTOR_ERROR:
-			HAL_UART_Transmit(&DEBUG_UART, (uint8_t*) "mot_er\r\n", 8, 100);
-			break;
-		case MSG_GET_ENCODER_ERROR:
-			HAL_UART_Transmit(&DEBUG_UART, (uint8_t*) "enc_er\r\n", 8, 100);
-			break;
-		case MSG_SET_AXIS_REQUESTED_STATE:
-			HAL_UART_Transmit(&DEBUG_UART, (uint8_t*) "state\r\n", 7, 100);
-			break;
-		case MSG_GET_ENCODER_COUNT:
-			//HAL_UART_Transmit(&huart1, (uint8_t*) "count\r\n", 8, 100);
-			break;
-		case MSG_GET_VBUS_VOLTAGE:
-			voltage = *(float *)&RxData;
-			canDataRecv->voltage = voltage;
-			char str[20];
-			sprintf(str, "voltage %.2f\r\n", canDataRecv->voltage);
-			HAL_UART_Transmit(&DEBUG_UART, (uint8_t*) str, strlen(str), 100);
-			break;
-		default:
-			break;
-		}
-	}
-	HAL_UART_Transmit(&DEBUG_UART, RxData, 8, 100);
-	*/
-//	else if (drvId == DRIVER_LIFT_ID)
-//	{
-
-//	}
-	/*uint32_t drvId = RxHeader.StdId - 0x580;
-	if (drvId == DRIVER_MOVE_ID) {
-		if (RxData[0] == 0x40 && RxData[1] == 0x04 && RxData[2] == 0x21 && RxData[3] == 0x01)
-		{
-			globData.enc_mot = *(int32_t*)&RxData[4];
-		}
-	}
-	*/
-#ifdef DRIVER_SINUS
-	//uint32_t drvId = DRIVER_MOVE_ID + 0x05800000;
-
-//	uint32_t drvId = DRIVER_MOVE_ID + 0x07000000;
+	//uint32_t drvId = DRIVER_MOVE_ID + 0x07000000;
 	if (RxHeader.ExtId == 0x05800001 && RxData[0] == 0x60) {
 		if (RxData[1] == 0x0F) {
 			globData.drv_cpu_temp = RxData[5];
@@ -126,8 +77,7 @@ uint8_t CanMsgRead(CanDataRecvTypeDef *canDataRecv) {
 			diagMsg.motor1 = *(DriverErrMsgTypeDef*)&RxData[4];
 			diagMsg.motor2 = *(DriverErrMsgTypeDef*)&RxData[6];
 		}
-	}
-#endif
+	}*/
 	NVIC_EnableIRQ(CAN1_RX0_IRQn);
 	return 1;
 }
@@ -135,88 +85,49 @@ uint8_t CanMsgRead(CanDataRecvTypeDef *canDataRecv) {
 
 uint8_t CanMsgSend(CanDataSendTypeDef *canDataSend) {
 
-
-	//uint8_t check_msg = 0; //проверка на тоже самое сообщение
-	/*if (canDataSend->canId != prevCanData.canId || canDataSend->canRTR != prevCanData.canRTR) {
-		check_msg = 1;
-	}
-	if (check_msg == 0) {
-		for (int i=0; i < sizeof(canDataSend->canData); i++) {
-			if (canDataSend->canData[i] != prevCanData.canData[i]) {
-				check_msg = 1;
-			}
+	if (canDataSend->canExtId != 0)
+	{
+		/////////DRIVER_KEYA////////
+		TxHeader.StdId = canDataSend->canId;
+		TxHeader.ExtId = canDataSend->canExtId;
+		TxHeader.RTR = canDataSend->canRTR;
+		TxHeader.IDE = CAN_ID_EXT;
+		TxHeader.DLC = 8;
+		TxHeader.TransmitGlobalTime = DISABLE;
+		//globData.can_mutex = 0;
+		for (uint32_t i = 0; i < sizeof(TxData); i++) {
+			TxData[i] = canDataSend->canData[i];
+		}
+		while (HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0);
+		if (HAL_CAN_AddTxMessage(&hcan1, &TxHeader, TxData, &TxMailbox) != HAL_OK) {
+			//HAL_UART_Transmit(&huart1, (uint8_t*) "no_trans\r\n", 10, 100);
+			return 0;
 		}
 	}
-	if (check_msg == 0) return 0;*/
-#ifdef DRIVER_SINUS
-	//////////////////////////SINUS china drv///////////////////
-	/*prevCanData.canId = canDataSend->canId;
-	prevCanData.canRTR = canDataSend->canRTR;
-	for (int i = 0; i < sizeof(canDataSend->canData); i++) {
-		prevCanData.canData[i] = canDataSend->canData[i];
-	}*/
-	TxHeader.StdId = canDataSend->canId;
-	TxHeader.ExtId = canDataSend->canExtId;
-	TxHeader.RTR = canDataSend->canRTR;
-	TxHeader.IDE = CAN_ID_EXT;
-	TxHeader.DLC = 8;
-	TxHeader.TransmitGlobalTime = 0;
-	//globData.can_mutex = 0;
-	for (int i = 0; i < sizeof(TxData); i++) {
-		TxData[i] = canDataSend->canData[i];
-	}
-	while (HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0);
-	if (HAL_CAN_AddTxMessage(&hcan1, &TxHeader, TxData, &TxMailbox) != HAL_OK) {
-		//HAL_UART_Transmit(&huart1, (uint8_t*) "no_trans\r\n", 10, 100);
-		return 0;
-	}
-	return 1;
-#else
-	/////////////////////china drv//////////////////
-	prevCanData.canId = canDataSend->canId;
-	prevCanData.canRTR = canDataSend->canRTR;
-	for (uint32_t i=0; i < sizeof(canDataSend->canData); i++) {
-		prevCanData.canData[i] = canDataSend->canData[i];
-	}
-	TxHeader.StdId = canDataSend->canId;
-	TxHeader.ExtId = 0;
-	TxHeader.RTR = canDataSend->canRTR;
-	TxHeader.IDE = CAN_ID_STD;
-	TxHeader.DLC = 8;
-	TxHeader.TransmitGlobalTime = DISABLE;
-	for(uint32_t i = 0; i < sizeof(TxData); i++) {
-		TxData[i] = canDataSend->canData[i];
-	}
-	while (HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0);
-	if (HAL_CAN_AddTxMessage(&hcan1, &TxHeader, TxData, &TxMailbox) != HAL_OK) {
-		//HAL_UART_Transmit(&huart1, (uint8_t*) "no_trans\r\n", 10, 100);
-		return 0;
+	else
+	{
+		//////////DRIVER_LKTECH/////////
+		prevCanData.canId = canDataSend->canId;
+		prevCanData.canRTR = canDataSend->canRTR;
+		for (uint32_t i=0; i < sizeof(canDataSend->canData); i++) {
+			prevCanData.canData[i] = canDataSend->canData[i];
+		}
+		TxHeader.StdId = canDataSend->canId;
+		TxHeader.ExtId = 0;
+		TxHeader.RTR = canDataSend->canRTR;
+		TxHeader.IDE = CAN_ID_STD;
+		TxHeader.DLC = 8;
+		TxHeader.TransmitGlobalTime = DISABLE;
+		for(uint32_t i = 0; i < sizeof(TxData); i++) {
+			TxData[i] = canDataSend->canData[i];
+		}
+		while (HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0);
+		if (HAL_CAN_AddTxMessage(&hcan1, &TxHeader, TxData, &TxMailbox) != HAL_OK) {
+			//HAL_UART_Transmit(&huart1, (uint8_t*) "no_trans\r\n", 10, 100);
+			return 0;
+		}
 	}
 	return 1;
-#endif
-
-
-	////////////////////////////vesc///////////////////
-
-	/*
-	//TxHeader.StdId = canDataSend->canId;
-	TxHeader.ExtId = canDataSend->canExtId;
-	TxHeader.RTR = canDataSend->canRTR;
-	TxHeader.IDE = CAN_ID_EXT;
-	TxHeader.DLC = 8;
-	TxHeader.TransmitGlobalTime = 0;
-	for(int i = 0; i < sizeof(TxData); i++) {
-		TxData[i] = canDataSend->canData[i];
-	}
-	while (HAL_CAN_GetTxMailboxesFreeLevel(&hcan2) == 0);
-	if (HAL_CAN_AddTxMessage(&hcan2, &TxHeader, TxData, &TxMailbox) != HAL_OK) {
-		return 0;
-	}
-	return 1;
-	osDelay(10);
-	*/
-
-	///////////////////////////////////////////////////
 }
 
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)

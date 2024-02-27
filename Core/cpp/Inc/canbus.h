@@ -26,6 +26,12 @@ enum CanGetMsgStatus {
 	CAN_GET_MSG_ERROR                   =  2,
 };
 
+typedef enum
+{
+	CAN_STD_ID       = 0x00U,
+	CAN_EXT_ID   	 = 0x01U,
+} CanExtIDTypeDef;
+
 typedef struct {
 	int32_t encoder;
 	float voltage;

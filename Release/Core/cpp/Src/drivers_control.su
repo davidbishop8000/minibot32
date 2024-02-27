@@ -1,1 +1,1 @@
-../Core/cpp/Src/drivers_control.cpp:12:6:void StartCanDriversTask(void*)	0	static
+../Core/cpp/Src/drivers_control.cpp:14:6:void StartCanDriversTask(void*)	96	static

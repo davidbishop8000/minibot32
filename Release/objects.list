@@ -17,6 +17,7 @@
 "./Core/cpp/Src/drivers_control.o"
 "./Core/cpp/Src/flash_data.o"
 "./Core/cpp/Src/inputs.o"
+"./Core/cpp/Src/lkTechDriver.o"
 "./Core/cpp/Src/mission.o"
 "./Core/cpp/Src/outputs.o"
 "./Core/cpp/Src/servo_control.o"

@@ -9,6 +9,7 @@ CPP_SRCS += \
 ../Core/cpp/Src/drivers_control.cpp \
 ../Core/cpp/Src/flash_data.cpp \
 ../Core/cpp/Src/inputs.cpp \
+../Core/cpp/Src/lkTechDriver.cpp \
 ../Core/cpp/Src/mission.cpp \
 ../Core/cpp/Src/outputs.cpp \
 ../Core/cpp/Src/servo_control.cpp \
@@ -19,6 +20,7 @@ OBJS += \
 ./Core/cpp/Src/drivers_control.o \
 ./Core/cpp/Src/flash_data.o \
 ./Core/cpp/Src/inputs.o \
+./Core/cpp/Src/lkTechDriver.o \
 ./Core/cpp/Src/mission.o \
 ./Core/cpp/Src/outputs.o \
 ./Core/cpp/Src/servo_control.o \
@@ -29,6 +31,7 @@ CPP_DEPS += \
 ./Core/cpp/Src/drivers_control.d \
 ./Core/cpp/Src/flash_data.d \
 ./Core/cpp/Src/inputs.d \
+./Core/cpp/Src/lkTechDriver.d \
 ./Core/cpp/Src/mission.d \
 ./Core/cpp/Src/outputs.d \
 ./Core/cpp/Src/servo_control.d \
@@ -42,7 +45,7 @@ Core/cpp/Src/%.o Core/cpp/Src/%.su: ../Core/cpp/Src/%.cpp Core/cpp/Src/subdir.mk
 clean: clean-Core-2f-cpp-2f-Src
 
 clean-Core-2f-cpp-2f-Src:
-	-$(RM) ./Core/cpp/Src/canbus.d ./Core/cpp/Src/canbus.o ./Core/cpp/Src/canbus.su ./Core/cpp/Src/drivers_control.d ./Core/cpp/Src/drivers_control.o ./Core/cpp/Src/drivers_control.su ./Core/cpp/Src/flash_data.d ./Core/cpp/Src/flash_data.o ./Core/cpp/Src/flash_data.su ./Core/cpp/Src/inputs.d ./Core/cpp/Src/inputs.o ./Core/cpp/Src/inputs.su ./Core/cpp/Src/mission.d ./Core/cpp/Src/mission.o ./Core/cpp/Src/mission.su ./Core/cpp/Src/outputs.d ./Core/cpp/Src/outputs.o ./Core/cpp/Src/outputs.su ./Core/cpp/Src/servo_control.d ./Core/cpp/Src/servo_control.o ./Core/cpp/Src/servo_control.su ./Core/cpp/Src/uart_wifi.d ./Core/cpp/Src/uart_wifi.o ./Core/cpp/Src/uart_wifi.su
+	-$(RM) ./Core/cpp/Src/canbus.d ./Core/cpp/Src/canbus.o ./Core/cpp/Src/canbus.su ./Core/cpp/Src/drivers_control.d ./Core/cpp/Src/drivers_control.o ./Core/cpp/Src/drivers_control.su ./Core/cpp/Src/flash_data.d ./Core/cpp/Src/flash_data.o ./Core/cpp/Src/flash_data.su ./Core/cpp/Src/inputs.d ./Core/cpp/Src/inputs.o ./Core/cpp/Src/inputs.su ./Core/cpp/Src/lkTechDriver.d ./Core/cpp/Src/lkTechDriver.o ./Core/cpp/Src/lkTechDriver.su ./Core/cpp/Src/mission.d ./Core/cpp/Src/mission.o ./Core/cpp/Src/mission.su ./Core/cpp/Src/outputs.d ./Core/cpp/Src/outputs.o ./Core/cpp/Src/outputs.su ./Core/cpp/Src/servo_control.d ./Core/cpp/Src/servo_control.o ./Core/cpp/Src/servo_control.su ./Core/cpp/Src/uart_wifi.d ./Core/cpp/Src/uart_wifi.o ./Core/cpp/Src/uart_wifi.su
 
 .PHONY: clean-Core-2f-cpp-2f-Src
 

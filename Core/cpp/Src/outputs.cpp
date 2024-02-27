@@ -30,38 +30,7 @@ void StartOutputsTask(void *argument)
 
 void SetOutputs()
 {
-	static int manual_mode_trig = 0;
 
-	if (globData.sens.button_manual_mode) {
-		manual_mode_trig = 1;
-		Y06_ON;
-		if (globData.current_move_comm == MOVE_MOTOR1_FORW) {
-			Y07_ON;
-		}
-		else if (globData.current_move_comm == MOVE_MOTOR1_BACK) {
-			Y08_ON;
-		}
-		else if (globData.current_move_comm == MOVE_MOTOR2_FORW) {
-			Y09_ON;
-		}
-		else if (globData.current_move_comm == MOVE_MOTOR2_BACK) {
-			Y10_ON;
-		}
-		else {
-			Y07_OFF;
-			Y08_OFF;
-			Y09_OFF;
-			Y10_OFF;
-		}
-	}
-	else if (manual_mode_trig) {
-		manual_mode_trig = 0;
-		Y06_OFF;
-		Y07_OFF;
-		Y08_OFF;
-		Y09_OFF;
-		Y10_OFF;
-	}
 }
 
 void LedBlink() {

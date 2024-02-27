@@ -17,6 +17,10 @@ extern "C"
 #include "cmsis_os2.h"
 #include "stm32f4xx_hal.h"
 #include "minibot_config.h"
+#include "canbus.h"
+
+#define COLLISION_MAX_TIME 1200
+#define COLLISION_MAX_DIMM 3
 
 void StartCanDriversTask(void *argument);
 
