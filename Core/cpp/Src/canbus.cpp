@@ -83,46 +83,12 @@ uint8_t CanMsgRead(CanDataRecvTypeDef *canDataRecv) {
 }
 
 
-uint8_t CanMsgSend(CanDataSendTypeDef *canDataSend) {
+uint8_t CanMsgSend(CAN_TxHeaderTypeDef *TxHeader, uint8_t canData[]) {
 
-	if (canDataSend->canExtId != 0)
+	if (TxHeader->ExtId != 0 || TxHeader->StdId != 0)
 	{
-		/////////DRIVER_KEYA////////
-		TxHeader.StdId = canDataSend->canId;
-		TxHeader.ExtId = canDataSend->canExtId;
-		TxHeader.RTR = canDataSend->canRTR;
-		TxHeader.IDE = CAN_ID_EXT;
-		TxHeader.DLC = 8;
-		TxHeader.TransmitGlobalTime = DISABLE;
-		//globData.can_mutex = 0;
-		for (uint32_t i = 0; i < sizeof(TxData); i++) {
-			TxData[i] = canDataSend->canData[i];
-		}
 		while (HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0);
-		if (HAL_CAN_AddTxMessage(&hcan1, &TxHeader, TxData, &TxMailbox) != HAL_OK) {
-			//HAL_UART_Transmit(&huart1, (uint8_t*) "no_trans\r\n", 10, 100);
-			return 0;
-		}
-	}
-	else
-	{
-		//////////DRIVER_LKTECH/////////
-		prevCanData.canId = canDataSend->canId;
-		prevCanData.canRTR = canDataSend->canRTR;
-		for (uint32_t i=0; i < sizeof(canDataSend->canData); i++) {
-			prevCanData.canData[i] = canDataSend->canData[i];
-		}
-		TxHeader.StdId = canDataSend->canId;
-		TxHeader.ExtId = 0;
-		TxHeader.RTR = canDataSend->canRTR;
-		TxHeader.IDE = CAN_ID_STD;
-		TxHeader.DLC = 8;
-		TxHeader.TransmitGlobalTime = DISABLE;
-		for(uint32_t i = 0; i < sizeof(TxData); i++) {
-			TxData[i] = canDataSend->canData[i];
-		}
-		while (HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0);
-		if (HAL_CAN_AddTxMessage(&hcan1, &TxHeader, TxData, &TxMailbox) != HAL_OK) {
+		if (HAL_CAN_AddTxMessage(&hcan1, TxHeader, canData, &TxMailbox) != HAL_OK) {
 			//HAL_UART_Transmit(&huart1, (uint8_t*) "no_trans\r\n", 10, 100);
 			return 0;
 		}

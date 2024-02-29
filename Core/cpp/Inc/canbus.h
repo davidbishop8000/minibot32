@@ -46,7 +46,7 @@ typedef struct {
 
 void StartCanTask(void *argument);
 uint8_t CanMsgRead(CanDataRecvTypeDef *canData);
-uint8_t CanMsgSend(CanDataSendTypeDef *canDataSend);
+uint8_t CanMsgSend(CAN_TxHeaderTypeDef *canDataSend, uint8_t canData[]);
 
 #ifdef __cplusplus
 }

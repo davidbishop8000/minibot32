@@ -1,5 +1,5 @@
 Core/cpp/Src/drivers_control.o: ../Core/cpp/Src/drivers_control.cpp \
- C:/ST_proj/minibot32/Core/cpp/Inc/drivers_control.h ../Core/Inc/main.h \
+ C:/ST_proj/minibot32/Core/cpp/Inc/KeyaLKTechDriver.h ../Core/Inc/main.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -33,8 +33,8 @@ Core/cpp/Src/drivers_control.o: ../Core/cpp/Src/drivers_control.cpp \
  ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h \
  C:/ST_proj/minibot32/Core/cpp/Inc/minibot_config.h \
  C:/ST_proj/minibot32/Core/cpp/Inc/canbus.h \
- C:/ST_proj/minibot32/Core/cpp/Inc/lkTechDriver.h
-C:/ST_proj/minibot32/Core/cpp/Inc/drivers_control.h:
+ C:/ST_proj/minibot32/Core/cpp/Inc/drivers_control.h
+C:/ST_proj/minibot32/Core/cpp/Inc/KeyaLKTechDriver.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -69,4 +69,4 @@ C:/ST_proj/minibot32/Core/cpp/Inc/drivers_control.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h:
 C:/ST_proj/minibot32/Core/cpp/Inc/minibot_config.h:
 C:/ST_proj/minibot32/Core/cpp/Inc/canbus.h:
-C:/ST_proj/minibot32/Core/cpp/Inc/lkTechDriver.h:
+C:/ST_proj/minibot32/Core/cpp/Inc/drivers_control.h:

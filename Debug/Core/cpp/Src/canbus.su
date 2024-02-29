@@ -2,6 +2,6 @@
 ../Drivers/CMSIS/Include/core_cm4.h:1724:22:void __NVIC_DisableIRQ(IRQn_Type)	16	static,ignoring_inline_asm
 ../Core/cpp/Src/canbus.cpp:30:6:void StartCanTask(void*)	16	static
 ../Core/cpp/Src/canbus.cpp:57:9:uint8_t CanMsgRead(CanDataRecvTypeDef*)	16	static
-../Core/cpp/Src/canbus.cpp:136:9:uint8_t CanMsgSend(CanDataSendTypeDef*)	24	static
-../Core/cpp/Src/canbus.cpp:222:6:void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef*)	16	static
-../Core/cpp/Src/canbus.cpp:230:6:void HAL_CAN_ErrorCallback(CAN_HandleTypeDef*)	16	static
+../Core/cpp/Src/canbus.cpp:86:9:uint8_t CanMsgSend(CAN_TxHeaderTypeDef*, uint8_t*)	16	static
+../Core/cpp/Src/canbus.cpp:99:6:void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef*)	16	static
+../Core/cpp/Src/canbus.cpp:107:6:void HAL_CAN_ErrorCallback(CAN_HandleTypeDef*)	16	static

@@ -1,3 +1,3 @@
-../Core/cpp/Src/outputs.cpp:31:6:void SetOutputs()	0	static
-../Core/cpp/Src/outputs.cpp:36:6:void LedBlink()	32	static
-../Core/cpp/Src/outputs.cpp:20:6:void StartOutputsTask(void*)	8	static
+../Core/cpp/Src/outputs.cpp:20:6:void StartOutputsTask(void*)	16	static
+../Core/cpp/Src/outputs.cpp:31:6:void SetOutputs()	4	static
+../Core/cpp/Src/outputs.cpp:36:6:void LedBlink()	16	static
