@@ -33,6 +33,7 @@ Core/cpp/Src/drivers_control.o: ../Core/cpp/Src/drivers_control.cpp \
  ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h \
  C:/ST_proj/minibot32/Core/cpp/Inc/minibot_config.h \
  C:/ST_proj/minibot32/Core/cpp/Inc/canbus.h \
+ C:/ST_proj/minibot32/Core/cpp/Inc/Servo.h \
  C:/ST_proj/minibot32/Core/cpp/Inc/drivers_control.h
 C:/ST_proj/minibot32/Core/cpp/Inc/KeyaLKTechDriver.h:
 ../Core/Inc/main.h:
@@ -69,4 +70,5 @@ C:/ST_proj/minibot32/Core/cpp/Inc/KeyaLKTechDriver.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h:
 C:/ST_proj/minibot32/Core/cpp/Inc/minibot_config.h:
 C:/ST_proj/minibot32/Core/cpp/Inc/canbus.h:
+C:/ST_proj/minibot32/Core/cpp/Inc/Servo.h:
 C:/ST_proj/minibot32/Core/cpp/Inc/drivers_control.h:

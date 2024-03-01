@@ -14,7 +14,7 @@ void StartServoTask(void *argument)
 	
 	for(;;)
 	{
-
+		osDelay(100);
 	}
 }
 

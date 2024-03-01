@@ -1,8 +1,8 @@
 ../Core/cpp/Src/KeyaLKTechDriver.cpp:10:1:KeyaLKTechDriver::KeyaLKTechDriver(uint32_t, uint32_t, uint32_t)	24	static
 ../Core/cpp/Src/KeyaLKTechDriver.cpp:27:1:KeyaLKTechDriver::KeyaLKTechDriver(uint32_t, uint32_t)	24	static
 ../Core/cpp/Src/KeyaLKTechDriver.cpp:28:1:KeyaLKTechDriver::KeyaLKTechDriver(uint32_t)	16	static
-../Core/cpp/Src/KeyaLKTechDriver.cpp:30:9:uint8_t KeyaLKTechDriver::SetSpeed(int32_t)	16	static
-../Core/cpp/Src/KeyaLKTechDriver.cpp:62:9:uint8_t KeyaLKTechDriver::Stop()	16	static
-../Core/cpp/Src/KeyaLKTechDriver.cpp:87:9:uint8_t KeyaLKTechDriver::Enable()	16	static
-../Core/cpp/Src/KeyaLKTechDriver.cpp:112:9:uint8_t KeyaLKTechDriver::Disable()	16	static
-../Core/cpp/Src/KeyaLKTechDriver.cpp:137:9:uint8_t KeyaLKTechDriver::SendData()	16	static
+../Core/cpp/Src/KeyaLKTechDriver.cpp:30:9:uint8_t KeyaLKTechDriver::setSpeed(int32_t)	16	static
+../Core/cpp/Src/KeyaLKTechDriver.cpp:62:9:uint8_t KeyaLKTechDriver::stop()	16	static
+../Core/cpp/Src/KeyaLKTechDriver.cpp:87:9:uint8_t KeyaLKTechDriver::enable()	16	static
+../Core/cpp/Src/KeyaLKTechDriver.cpp:112:9:uint8_t KeyaLKTechDriver::disable()	16	static
+../Core/cpp/Src/KeyaLKTechDriver.cpp:137:9:uint8_t KeyaLKTechDriver::sendData()	16	static

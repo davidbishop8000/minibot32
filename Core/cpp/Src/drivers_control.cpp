@@ -6,16 +6,22 @@
  */
 
 #include <KeyaLKTechDriver.h>
+#include "Servo.h"
 #include "drivers_control.h"
 
+extern TIM_HandleTypeDef htim3;
 extern GlobDataTypeDef globData;
 extern MinibotConfigTypeDef minibotConfig;
 
 void StartCanDriversTask(void *argument)
 {
+	Servo servo1(&htim3, TIM_CHANNEL_1);
+
 	KeyaLKTechDriver DriverFB(0x140 + DRIVER1_LKTECH_ID);
 	KeyaLKTechDriver DriverLR(0x140 + DRIVER2_LKTECH_ID);
-
+	osDelay(1000);
+	DriverFB.disable();
+	DriverLR.disable();
 	for(;;)
 	{
 		int32_t speed = 30000;
@@ -33,8 +39,15 @@ void StartCanDriversTask(void *argument)
 		DriverLR.setSpeed(speed);
 		osDelay(3000);
 		DriverFB.enable();
-		osDelay(3000);
+		servo1.setAngle(0);
+		osDelay(1000);
+		servo1.setAngle(90);
+		osDelay(1000);
+		servo1.setAngle(180);
+		osDelay(1000);
+		servo1.setAngle(270);
+		osDelay(5000);
 
+		osDelay(1);
 	}
-	osDelay(1);
 }
