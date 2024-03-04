@@ -29,6 +29,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "minibot_config.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -48,6 +50,14 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+
+extern DMA_HandleTypeDef RC_UART_DMA;
+extern DMA_HandleTypeDef BMS_UART_DMA;
+extern DMA_HandleTypeDef WIFI_UART_DMA;
+
+extern uint8_t rc_uart_buff[100];
+extern uint8_t bms_uart_buff[100];
+extern uint8_t wifi_uart_buff[100];
 
 /* USER CODE END PV */
 
@@ -100,7 +110,15 @@ int main(void)
   MX_IWDG_Init();
   MX_CAN1_Init();
   /* USER CODE BEGIN 2 */
-
+  HAL_Delay(2500);
+  HAL_UARTEx_ReceiveToIdle_DMA(&RC_UART, rc_uart_buff, sizeof(rc_uart_buff));
+  HAL_UARTEx_ReceiveToIdle_DMA(&BMS_UART, bms_uart_buff, sizeof(bms_uart_buff));
+  HAL_UARTEx_ReceiveToIdle_DMA(&WIFI_UART, wifi_uart_buff, sizeof(wifi_uart_buff));
+  __HAL_DMA_DISABLE_IT(&RC_UART_DMA, DMA_IT_HT);
+  __HAL_DMA_DISABLE_IT(&BMS_UART_DMA, DMA_IT_HT);
+  __HAL_DMA_DISABLE_IT(&WIFI_UART_DMA, DMA_IT_HT);
+  HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_ALL);
+  HAL_IWDG_Refresh(&hiwdg);
   /* USER CODE END 2 */
 
   /* Init scheduler */

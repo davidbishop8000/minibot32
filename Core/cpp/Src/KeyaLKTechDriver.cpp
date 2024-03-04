@@ -134,9 +134,31 @@ uint8_t KeyaLKTechDriver::disable()
 	return KeyaLKTechDriver::sendData();
 }
 
+uint8_t KeyaLKTechDriver::getEnc()
+{
+	if (_axis) {
+		_canData[0] = 0x23;
+		_canData[1] = 0x0C;
+		_canData[2] = 0x20;
+		_canData[3] = _axis;
+		_canData[4] = 0x00;
+		_canData[5] = 0x00;
+		_canData[6] = 0x00;
+		_canData[7] = 0x00;
+	} else {
+		_canData[0] = 0x9C;
+		_canData[1] = 0x00;
+		_canData[2] = 0x00;
+		_canData[3] = 0x00;
+		_canData[4] = 0x00;
+		_canData[5] = 0x00;
+		_canData[6] = 0x00;
+		_canData[7] = 0x00;
+	}
+	return CanMsgSend(&_canTxHeader, _canData);
+}
+
 uint8_t KeyaLKTechDriver::sendData()
 {
 	return CanMsgSend(&_canTxHeader, _canData);
 }
-
-

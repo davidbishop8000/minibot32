@@ -152,6 +152,8 @@ typedef struct {
 	uint32_t cycles_set;
 	float volume;
 	uint32_t time_hold;
+	uint16_t LKEncoder;
+	int8_t LKTemp;
 } GlobDataTypeDef;
 
 typedef struct {

@@ -16,6 +16,10 @@
 extern UART_HandleTypeDef DEBUG_UART;
 extern CAN_HandleTypeDef hcan1;
 extern GlobDataTypeDef globData;
+
+extern UART_HandleTypeDef WIFI_UART;
+extern DMA_HandleTypeDef WIFI_UART_DMA;
+
 char ns_str[30];
 float velocity = 20.0;
 volatile uint8_t NewCanMsg = 0;
@@ -78,6 +82,15 @@ uint8_t CanMsgRead(CanDataRecvTypeDef *canDataRecv) {
 			diagMsg.motor2 = *(DriverErrMsgTypeDef*)&RxData[6];
 		}
 	}*/
+
+	//uint32_t drvId = 0x140 + DRIVER1_LKTECH_ID;
+	//if (RxHeader.StdId == drvId && RxData[0] == 0x9C) {
+			globData.LKTemp = RxData[1];//*(uint16_t*) &RxData[6];
+	//}
+			globData.LKEncoder = *(uint16_t*) &RxData[6];
+			//HAL_UART_Transmit(&WIFI_UART, (uint8_t*) "get\r\n", 5, 100);
+			//HAL_UART_Transmit(&WIFI_UART, RxData, 8, 100);
+
 	NVIC_EnableIRQ(CAN1_RX0_IRQn);
 	return 1;
 }

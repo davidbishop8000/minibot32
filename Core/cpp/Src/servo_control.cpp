@@ -6,6 +6,7 @@
  */
 
 #include "servo_control.h"
+#include "stdio.h"
 extern GlobDataTypeDef globData;
 extern MinibotConfigTypeDef minibotConfig;
 
@@ -14,7 +15,7 @@ void StartServoTask(void *argument)
 	
 	for(;;)
 	{
-		osDelay(100);
+		osDelay(3000);
 	}
 }
 

@@ -24,6 +24,7 @@ public:
 	uint8_t stop();
 	uint8_t enable();
 	uint8_t disable();
+	uint8_t getEnc();
 
 private:
 	uint8_t sendData();

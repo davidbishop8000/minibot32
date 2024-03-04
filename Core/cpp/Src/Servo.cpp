@@ -16,10 +16,10 @@ uint8_t Servo::setAngle(int32_t angle)
 {
 	HAL_TIM_PWM_Start(_htim, _timChannel);
 	TIM3->CCR1 = Servo::map(angle, SERVO_MIN_ANGLE, SERVO_MAX_ANGLE, SERVO_MIN_W, SERVO_MAX_W);
-	uint32_t comp = Servo::map(angle, SERVO_MIN_ANGLE, SERVO_MAX_ANGLE, SERVO_MIN_W, SERVO_MAX_W);
+	//uint32_t comp = Servo::map(angle, SERVO_MIN_ANGLE, SERVO_MAX_ANGLE, SERVO_MIN_W, SERVO_MAX_W);
 	//__HAL_TIM_SET_COMPARE(_htim, _timChannel, comp);
 	_angle = angle;
-	osDelay(5000);
+	osDelay(800);
 	HAL_TIM_PWM_Stop(_htim, _timChannel);
 	return 1;
 }

@@ -10,7 +10,13 @@
 #include "minibot_config.h"
 #include "flash_data.h"
 
-//#include <stdio.h> //for test
+#include <stdio.h> //for test
+
+extern UART_HandleTypeDef RC_UART;
+extern DMA_HandleTypeDef RC_UART_DMA;
+
+extern UART_HandleTypeDef BMS_UART;
+extern DMA_HandleTypeDef BMS_UART_DMA;
 
 extern UART_HandleTypeDef WIFI_UART;
 extern DMA_HandleTypeDef WIFI_UART_DMA;
@@ -18,6 +24,11 @@ extern DMA_HandleTypeDef WIFI_UART_DMA;
 extern GlobDataTypeDef globData;
 extern MinibotConfigTypeDef minibotConfig;
 uint8_t new_wifi_data = 0;
+uint8_t new_remote_data = 0;
+uint8_t new_bms_data = 0;
+
+uint8_t rc_uart_buff[100];
+uint8_t bms_uart_buff[100];
 uint8_t wifi_uart_buff[100];
 StatusMsgTypeDef statusMsg;
 JobMsgTypeDef jobMsg;
@@ -27,10 +38,10 @@ void StartUartWiFiTask(void *argument)
 {
 	HAL_UARTEx_ReceiveToIdle_DMA(&WIFI_UART, wifi_uart_buff, sizeof(wifi_uart_buff));
 	__HAL_DMA_DISABLE_IT(&WIFI_UART_DMA, DMA_IT_HT);
-	ConfigInit();
+	//ConfigInit();
 	for(;;)
 	{
-		if ((new_wifi_data && wifi_uart_buff[2] == WIFI_CONTROL_ID)
+		/*if ((new_wifi_data && wifi_uart_buff[2] == WIFI_CONTROL_ID)
 				&& wifi_uart_buff[0] == START_MSG0 && wifi_uart_buff[1] == START_MSG1) {
 			enum WIFI_MSG_ID MSG_ID = (WIFI_MSG_ID)wifi_uart_buff[3];
 			if (MSG_ID == WIFI_GET_STATUS) {
@@ -92,6 +103,12 @@ void StartUartWiFiTask(void *argument)
 
 		//osDelay(1000);
 		//SendStatus(); //for test
+		//globData.LKEncoder++;
+		uint8_t str[30];
+		sprintf((char*)str, (char*)"e: %d, t: %d\n\r", globData.LKEncoder, globData.LKTemp);
+		HAL_UART_Transmit(&huart1, str, strlen((char *)str), 100);
+		//HAL_UART_Transmit(&WIFI_UART, (uint8_t*)"WIFI ok", 7, 100);
+		osDelay(1000);
 	}
 }
 
@@ -297,11 +314,19 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 	}
 }
 
-
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size) {
-	if (huart->Instance == WIFI_UART_Ins) {
+	if (huart->Instance == RC_UART_Ins) {
+		new_remote_data = 1;
+		HAL_UARTEx_ReceiveToIdle_DMA(&RC_UART, rc_uart_buff, sizeof(rc_uart_buff));
+		__HAL_DMA_DISABLE_IT(&RC_UART_DMA, DMA_IT_HT);
+	} else if (huart->Instance == BMS_UART_Ins) {
+		new_bms_data = 1;
+		HAL_UARTEx_ReceiveToIdle_DMA(&BMS_UART, bms_uart_buff, sizeof(bms_uart_buff));
+		__HAL_DMA_DISABLE_IT(&BMS_UART_DMA, DMA_IT_HT);
+	} else if (huart->Instance == WIFI_UART_Ins) {
 		new_wifi_data = 1;
 		HAL_UARTEx_ReceiveToIdle_DMA(&WIFI_UART, wifi_uart_buff, sizeof(wifi_uart_buff));
 		__HAL_DMA_DISABLE_IT(&WIFI_UART_DMA, DMA_IT_HT);
+		//HAL_UART_Transmit(&WIFI_UART, (uint8_t*)"DEBA ok", 7, 100);
 	}
 }

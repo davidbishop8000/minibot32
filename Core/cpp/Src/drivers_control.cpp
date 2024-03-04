@@ -20,11 +20,11 @@ void StartCanDriversTask(void *argument)
 	KeyaLKTechDriver DriverFB(0x140 + DRIVER1_LKTECH_ID);
 	KeyaLKTechDriver DriverLR(0x140 + DRIVER2_LKTECH_ID);
 	osDelay(1000);
-	DriverFB.disable();
-	DriverLR.disable();
+	//DriverFB.disable();
+	//DriverLR.disable();
 	for(;;)
 	{
-		int32_t speed = 30000;
+		/*int32_t speed = 30000;
 		DriverFB.setSpeed(-speed);
 		osDelay(3000);
 		speed = 90000;
@@ -46,7 +46,13 @@ void StartCanDriversTask(void *argument)
 		servo1.setAngle(180);
 		osDelay(1000);
 		servo1.setAngle(270);
-		osDelay(5000);
+		osDelay(5000);*/
+		DriverFB.setSpeed(3000);
+		osDelay(500);
+		DriverFB.stop();
+		osDelay(50);
+		DriverFB.getEnc();
+		osDelay(500);
 
 		osDelay(1);
 	}
