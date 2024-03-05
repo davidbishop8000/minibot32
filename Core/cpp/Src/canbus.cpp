@@ -6,6 +6,7 @@
  */
 
 #include "canbus.h"
+#include "InitCanDrivers.h"
 
 //extern CAN_TxHeaderTypeDef TxHeader;
 //extern CAN_RxHeaderTypeDef RxHeader;
@@ -30,6 +31,12 @@ uint8_t RxData[8] = { 0, };
 uint32_t TxMailbox = 0;
 CanDataRecvTypeDef canDataRecv;
 CanDataSendTypeDef prevCanData;
+
+extern KeyaLKTechDriver DriverFB;
+extern KeyaLKTechDriver DriverLR;
+
+extern KeyaLKTechDriver *mdrivers[DRIVERS_QUANT];
+
 
 void StartCanTask(void *argument) {
 	UNUSED(argument);
@@ -61,6 +68,20 @@ void StartCanTask(void *argument) {
 uint8_t CanMsgRead(CanDataRecvTypeDef *canDataRecv) {
 
 	NVIC_DisableIRQ(CAN1_RX0_IRQn);
+	if (RxHeader.IDE == CAN_STD_ID)
+	{
+		for (int i=0; i<DRIVERS_QUANT; i++)
+		{
+			if (RxHeader.StdId == mdrivers[i]->getId() && RxData[0] == 0x9C) {
+				mdrivers[i]->setEnc(*(uint16_t*) &RxData[6]);
+				mdrivers[i]->setTemp(RxData[1]);
+			}
+		}
+	}
+	else
+	{
+
+	}
 	/*//uint32_t drvId = DRIVER_MOVE_ID + 0x05800000;
 
 	//uint32_t drvId = DRIVER_MOVE_ID + 0x07000000;
@@ -83,13 +104,10 @@ uint8_t CanMsgRead(CanDataRecvTypeDef *canDataRecv) {
 		}
 	}*/
 
-	//uint32_t drvId = 0x140 + DRIVER1_LKTECH_ID;
-	//if (RxHeader.StdId == drvId && RxData[0] == 0x9C) {
-			globData.LKTemp = RxData[1];//*(uint16_t*) &RxData[6];
-	//}
-			globData.LKEncoder = *(uint16_t*) &RxData[6];
-			//HAL_UART_Transmit(&WIFI_UART, (uint8_t*) "get\r\n", 5, 100);
-			//HAL_UART_Transmit(&WIFI_UART, RxData, 8, 100);
+
+
+	//HAL_UART_Transmit(&WIFI_UART, (uint8_t*) "get\r\n", 5, 100);
+	//HAL_UART_Transmit(&WIFI_UART, RxData, 8, 100);
 
 	NVIC_EnableIRQ(CAN1_RX0_IRQn);
 	return 1;

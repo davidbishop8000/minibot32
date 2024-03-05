@@ -31,7 +31,10 @@ Core/cpp/Src/canbus.o: ../Core/cpp/Src/canbus.cpp \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h \
- C:/ST_proj/minibot32/Core/cpp/Inc/minibot_config.h
+ C:/ST_proj/minibot32/Core/cpp/Inc/minibot_config.h \
+ C:/ST_proj/minibot32/Core/cpp/Inc/InitCanDrivers.h \
+ C:/ST_proj/minibot32/Core/cpp/Inc/KeyaLKTechDriver.h \
+ C:/ST_proj/minibot32/Core/cpp/Inc/canbus.h
 C:/ST_proj/minibot32/Core/cpp/Inc/canbus.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
@@ -66,3 +69,6 @@ C:/ST_proj/minibot32/Core/cpp/Inc/canbus.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h:
 C:/ST_proj/minibot32/Core/cpp/Inc/minibot_config.h:
+C:/ST_proj/minibot32/Core/cpp/Inc/InitCanDrivers.h:
+C:/ST_proj/minibot32/Core/cpp/Inc/KeyaLKTechDriver.h:
+C:/ST_proj/minibot32/Core/cpp/Inc/canbus.h:

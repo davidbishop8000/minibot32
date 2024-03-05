@@ -43,6 +43,8 @@ extern "C"
 
 #define DRIVER_KEYA_ID 0x05
 
+#define DRIVERS_QUANT 4
+
 #define FLASH_INIT 0x44
 
 ////////Control//////////
@@ -152,7 +154,8 @@ typedef struct {
 	uint32_t cycles_set;
 	float volume;
 	uint32_t time_hold;
-	uint16_t LKEncoder;
+	//uint16_t LKEncoder;
+	uint32_t LKEncoder;
 	int8_t LKTemp;
 } GlobDataTypeDef;
 

@@ -7,6 +7,8 @@
 
 #include "inputs.h"
 #include "minibot_config.h"
+
+extern TIM_HandleTypeDef htim4;
 extern GlobDataTypeDef globData;
 extern MinibotConfigTypeDef minibotConfig;
 
@@ -27,4 +29,19 @@ void StartInputsTask(void *argument)
 		IN_X12 ? (globData.sens.button8 = 0) : (globData.sens.button8 = 1);
 		osDelay(1);
 	}
+}
+
+int32_t unwrap_encoder(uint16_t in, int32_t *prev)
+{
+    int32_t c32 = (int32_t)in - ENC_HALF_PERIOD;
+    int32_t dif = (c32-*prev);
+
+    int32_t mod_dif = ((dif + ENC_HALF_PERIOD) % ENC_ONE_PERIOD) - ENC_HALF_PERIOD;
+    if(dif < -ENC_HALF_PERIOD) {
+        mod_dif += ENC_ONE_PERIOD;
+    }
+    int32_t unwrapped = *prev + mod_dif;
+    *prev = unwrapped;
+
+    return unwrapped + ENC_HALF_PERIOD;
 }

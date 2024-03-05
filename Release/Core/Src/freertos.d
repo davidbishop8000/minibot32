@@ -47,8 +47,8 @@ Core/Src/freertos.o: ../Core/Src/freertos.c \
  C:/ST_proj/minibot32/Core/cpp/Inc/servo_control.h \
  C:/ST_proj/minibot32/Core/cpp/Inc/minibot_config.h \
  C:/ST_proj/minibot32/Core/cpp/Inc/uart_wifi.h ../Core/Inc/usart.h \
- ../Core/Inc/main.h C:/ST_proj/minibot32/Core/cpp/Inc/canbus.h \
- C:/ST_proj/minibot32/Core/cpp/Inc/drivers_control.h \
+ ../Core/Inc/main.h C:/ST_proj/minibot32/Core/cpp/Inc/drivers_control.h \
+ C:/ST_proj/minibot32/Core/cpp/Inc/canbus.h \
  C:/ST_proj/minibot32/Core/cpp/Inc/canbus.h
 ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 ../Core/Inc/FreeRTOSConfig.h:
@@ -101,6 +101,6 @@ C:/ST_proj/minibot32/Core/cpp/Inc/minibot_config.h:
 C:/ST_proj/minibot32/Core/cpp/Inc/uart_wifi.h:
 ../Core/Inc/usart.h:
 ../Core/Inc/main.h:
-C:/ST_proj/minibot32/Core/cpp/Inc/canbus.h:
 C:/ST_proj/minibot32/Core/cpp/Inc/drivers_control.h:
+C:/ST_proj/minibot32/Core/cpp/Inc/canbus.h:
 C:/ST_proj/minibot32/Core/cpp/Inc/canbus.h:

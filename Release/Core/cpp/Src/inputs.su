@@ -1,1 +1,2 @@
-../Core/cpp/Src/inputs.cpp:13:6:void StartInputsTask(void*)	16	static
+../Core/cpp/Src/inputs.cpp:15:6:void StartInputsTask(void*)	16	static
+../Core/cpp/Src/inputs.cpp:34:9:int32_t unwrap_encoder(uint16_t, int32_t*)	32	static

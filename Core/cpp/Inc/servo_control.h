@@ -1,5 +1,5 @@
 /*
- * stepper_control.h
+ * servo_control.h
  *
  *  Created on: March 5, 2024
  *      Author: USER
@@ -20,11 +20,6 @@ extern "C"
 #include "minibot_config.h"
 
 void StartServoTask(void *argument);
-
-void motor1_en();
-void motor1_dis();
-void motor_press_en();
-void motor_press_dis();
 
 #ifdef __cplusplus
 }

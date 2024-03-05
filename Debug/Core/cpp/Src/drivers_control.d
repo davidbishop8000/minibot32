@@ -34,7 +34,10 @@ Core/cpp/Src/drivers_control.o: ../Core/cpp/Src/drivers_control.cpp \
  C:/ST_proj/minibot32/Core/cpp/Inc/minibot_config.h \
  C:/ST_proj/minibot32/Core/cpp/Inc/canbus.h \
  C:/ST_proj/minibot32/Core/cpp/Inc/Servo.h \
- C:/ST_proj/minibot32/Core/cpp/Inc/drivers_control.h
+ C:/ST_proj/minibot32/Core/cpp/Inc/drivers_control.h \
+ C:/ST_proj/minibot32/Core/cpp/Inc/canbus.h \
+ C:/ST_proj/minibot32/Core/cpp/Inc/InitCanDrivers.h \
+ C:/ST_proj/minibot32/Core/cpp/Inc/KeyaLKTechDriver.h
 C:/ST_proj/minibot32/Core/cpp/Inc/KeyaLKTechDriver.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
@@ -72,3 +75,6 @@ C:/ST_proj/minibot32/Core/cpp/Inc/minibot_config.h:
 C:/ST_proj/minibot32/Core/cpp/Inc/canbus.h:
 C:/ST_proj/minibot32/Core/cpp/Inc/Servo.h:
 C:/ST_proj/minibot32/Core/cpp/Inc/drivers_control.h:
+C:/ST_proj/minibot32/Core/cpp/Inc/canbus.h:
+C:/ST_proj/minibot32/Core/cpp/Inc/InitCanDrivers.h:
+C:/ST_proj/minibot32/Core/cpp/Inc/KeyaLKTechDriver.h:

@@ -13,6 +13,7 @@
 "./Core/Src/tim.o"
 "./Core/Src/usart.o"
 "./Core/Startup/startup_stm32f407vetx.o"
+"./Core/cpp/Src/InitCanDrivers.o"
 "./Core/cpp/Src/KeyaLKTechDriver.o"
 "./Core/cpp/Src/Servo.o"
 "./Core/cpp/Src/canbus.o"

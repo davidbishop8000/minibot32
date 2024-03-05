@@ -8,17 +8,27 @@
 #include <KeyaLKTechDriver.h>
 #include "Servo.h"
 #include "drivers_control.h"
+#include "canbus.h"
+#include "InitCanDrivers.h"
 
 extern TIM_HandleTypeDef htim3;
 extern GlobDataTypeDef globData;
 extern MinibotConfigTypeDef minibotConfig;
 
+KeyaLKTechDriver DriverFB(0x140 + DRIVER1_LKTECH_ID);
+KeyaLKTechDriver DriverLR(0x140 + DRIVER2_LKTECH_ID);
+KeyaLKTechDriver *mdrivers[DRIVERS_QUANT];
+
 void StartCanDriversTask(void *argument)
 {
+	mdrivers[0] = &DriverFB;
+	mdrivers[1] = &DriverLR;
+	mdrivers[2] = &DriverFB;
+	mdrivers[3] = &DriverFB;
+
 	Servo servo1(&htim3, TIM_CHANNEL_1);
 
-	KeyaLKTechDriver DriverFB(0x140 + DRIVER1_LKTECH_ID);
-	KeyaLKTechDriver DriverLR(0x140 + DRIVER2_LKTECH_ID);
+	DriversObjectInit(mdrivers, DRIVERS_QUANT);
 	osDelay(1000);
 	//DriverFB.disable();
 	//DriverLR.disable();
@@ -51,8 +61,18 @@ void StartCanDriversTask(void *argument)
 		osDelay(500);
 		DriverFB.stop();
 		osDelay(50);
-		DriverFB.getEnc();
+		DriverFB.readEnc();
 		osDelay(500);
+		globData.LKEncoder = DriverFB.getPos();
+		globData.LKTemp = DriverFB.getTemp();
+		DriverFB.setSpeed(3000);
+		osDelay(500);
+		DriverFB.stop();
+		osDelay(50);
+		DriverFB.readEnc();
+		osDelay(500);
+		globData.LKEncoder = DriverFB.getPos();
+		globData.LKTemp = DriverFB.getTemp();
 
 		osDelay(1);
 	}

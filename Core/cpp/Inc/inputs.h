@@ -82,6 +82,7 @@ PA15    X23
 #define IN_X23 GPIOA->IDR & (1 << 15)
 
 void StartInputsTask(void *argument);
+int32_t unwrap_encoder(uint16_t in, int32_t *prev);
 
 #ifdef __cplusplus
 }

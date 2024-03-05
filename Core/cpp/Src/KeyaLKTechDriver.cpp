@@ -134,7 +134,17 @@ uint8_t KeyaLKTechDriver::disable()
 	return KeyaLKTechDriver::sendData();
 }
 
-uint8_t KeyaLKTechDriver::getEnc()
+uint32_t KeyaLKTechDriver::getId()
+{
+
+	if (_canTxHeader.ExtId)
+	{
+		return  _canTxHeader.ExtId;
+	}
+	return  _canTxHeader.StdId;
+}
+
+uint8_t KeyaLKTechDriver::readEnc()
 {
 	if (_axis) {
 		_canData[0] = 0x23;
@@ -156,6 +166,41 @@ uint8_t KeyaLKTechDriver::getEnc()
 		_canData[7] = 0x00;
 	}
 	return CanMsgSend(&_canTxHeader, _canData);
+}
+
+int32_t KeyaLKTechDriver::getPos()
+{
+	return _enc;
+}
+
+int8_t KeyaLKTechDriver::getTemp()
+{
+	return _temp;
+}
+
+void KeyaLKTechDriver::setTemp(int8_t temp)
+{
+	_temp = temp;
+}
+
+void KeyaLKTechDriver::setEnc(int32_t enc)
+{
+	_enc = KeyaLKTechDriver::UnwrapEncoder(enc, &_prevEnc);
+}
+
+int32_t KeyaLKTechDriver::UnwrapEncoder(uint16_t in, int32_t *prev)
+{
+    int32_t c32 = (int32_t)in - LK_ENC_HALF_PERIOD;
+    int32_t dif = (c32-*prev);
+
+    int32_t mod_dif = ((dif + LK_ENC_HALF_PERIOD) % LK_ENC_ONE_PERIOD) - LK_ENC_HALF_PERIOD;
+    if(dif < -LK_ENC_HALF_PERIOD) {
+        mod_dif += LK_ENC_ONE_PERIOD;
+    }
+    int32_t unwrapped = *prev + mod_dif;
+    *prev = unwrapped;
+
+    return unwrapped + LK_ENC_HALF_PERIOD;
 }
 
 uint8_t KeyaLKTechDriver::sendData()
