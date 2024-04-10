@@ -13,6 +13,7 @@
 extern IWDG_HandleTypeDef hiwdg;
 extern GlobDataTypeDef globData;
 extern MinibotConfigTypeDef minibotConfig;
+extern ContrlMsgTypeDef contrlMsg;
 
 //extern IWDG_HandleTypeDef hiwdg;
 
@@ -24,13 +25,24 @@ void StartOutputsTask(void *argument)
 		HAL_IWDG_Refresh(&hiwdg);
 		SetOutputs();
 		if (globData.LEDB) LedBlink();
-		osDelay(1);
+		osDelay(5);
 	}
 }
 
 void SetOutputs()
 {
-
+	Y21_ON;
+	osDelay(100);
+	Y22_ON;
+	osDelay(20);
+	Y21_OFF;
+	osDelay(100);
+	Y23_ON;
+	osDelay(20);
+	Y22_OFF;
+	osDelay(100);
+	Y23_OFF;
+	osDelay(300);
 }
 
 void LedBlink() {

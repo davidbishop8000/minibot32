@@ -10,6 +10,7 @@
 ../Core/cpp/Src/KeyaLKTechDriver.cpp:171:9:int32_t KeyaLKTechDriver::getPos()	16	static
 ../Core/cpp/Src/KeyaLKTechDriver.cpp:176:8:int8_t KeyaLKTechDriver::getTemp()	16	static
 ../Core/cpp/Src/KeyaLKTechDriver.cpp:181:6:void KeyaLKTechDriver::setTemp(int8_t)	16	static
-../Core/cpp/Src/KeyaLKTechDriver.cpp:186:6:void KeyaLKTechDriver::setEnc(int32_t)	16	static
-../Core/cpp/Src/KeyaLKTechDriver.cpp:191:9:int32_t KeyaLKTechDriver::UnwrapEncoder(uint16_t, int32_t*)	40	static
-../Core/cpp/Src/KeyaLKTechDriver.cpp:206:9:uint8_t KeyaLKTechDriver::sendData()	16	static
+../Core/cpp/Src/KeyaLKTechDriver.cpp:186:9:uint8_t KeyaLKTechDriver::setPos(int32_t)	16	static
+../Core/cpp/Src/KeyaLKTechDriver.cpp:198:6:void KeyaLKTechDriver::setEnc(int32_t)	16	static
+../Core/cpp/Src/KeyaLKTechDriver.cpp:203:9:int32_t KeyaLKTechDriver::UnwrapEncoder(uint16_t, int32_t*)	40	static
+../Core/cpp/Src/KeyaLKTechDriver.cpp:218:9:uint8_t KeyaLKTechDriver::sendData()	16	static

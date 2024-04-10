@@ -14,6 +14,7 @@
 extern TIM_HandleTypeDef htim3;
 extern GlobDataTypeDef globData;
 extern MinibotConfigTypeDef minibotConfig;
+extern ContrlMsgTypeDef contrlMsg;
 
 KeyaLKTechDriver DriverFB(0x140 + DRIVER1_LKTECH_ID);
 KeyaLKTechDriver DriverLR(0x140 + DRIVER2_LKTECH_ID);
@@ -28,10 +29,11 @@ void StartCanDriversTask(void *argument)
 
 	Servo servo1(&htim3, TIM_CHANNEL_1);
 
-	DriversObjectInit(mdrivers, DRIVERS_QUANT);
+	//DriversObjectInit(mdrivers, DRIVERS_QUANT);
 	osDelay(1000);
 	//DriverFB.disable();
 	//DriverLR.disable();
+	enum MOVE_COMM command;
 	for(;;)
 	{
 		/*int32_t speed = 30000;
@@ -57,23 +59,49 @@ void StartCanDriversTask(void *argument)
 		osDelay(1000);
 		servo1.setAngle(270);
 		osDelay(5000);*/
-		DriverFB.setSpeed(3000);
-		osDelay(500);
-		DriverFB.stop();
-		osDelay(50);
-		DriverFB.readEnc();
-		osDelay(500);
-		globData.LKEncoder = DriverFB.getPos();
-		globData.LKTemp = DriverFB.getTemp();
-		DriverFB.setSpeed(3000);
-		osDelay(500);
-		DriverFB.stop();
-		osDelay(50);
-		DriverFB.readEnc();
-		osDelay(500);
-		globData.LKEncoder = DriverFB.getPos();
-		globData.LKTemp = DriverFB.getTemp();
 
+
+		/*
+		DriverFB.setSpeed(3000);
+		osDelay(500);
+		DriverFB.stop();
+		osDelay(50);
+		DriverFB.readEnc();
+		osDelay(500);
+		globData.LKEncoder = DriverFB.getPos();
+		globData.LKTemp = DriverFB.getTemp();
+		DriverFB.setSpeed(3000);
+		osDelay(500);
+		DriverFB.stop();
+		osDelay(50);
+		DriverFB.readEnc();
+		osDelay(500);
+		globData.LKEncoder = DriverFB.getPos();
+		globData.LKTemp = DriverFB.getTemp();
+		*/
+		command = (MOVE_COMM)contrlMsg.comm;
+		if (command != MOVE_NONE)
+		{
+			if (command == MOVE_POS_FB)
+			{
+				DriverFB.readEnc();
+				globData.LKEncoder = DriverFB.getPos();
+				globData.LKTemp = DriverFB.getTemp();
+			}
+			else if (command == MOVE_SERVO)
+			{
+				if (contrlMsg.pos_servo == 1)
+				{
+					servo1.setAngle(0);
+					contrlMsg.comm = 0;
+				}
+				else if (contrlMsg.pos_servo == 2)
+				{
+					servo1.setAngle(180);
+					contrlMsg.comm = 0;
+				}
+			}
+		}
 		osDelay(1);
 	}
 }

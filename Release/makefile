@@ -72,6 +72,12 @@ default.size.stdout \
 OBJDUMP_LIST += \
 minibot32.list \
 
+OBJCOPY_HEX += \
+minibot32.hex \
+
+OBJCOPY_BIN += \
+minibot32.bin \
+
 
 # All Target
 all: main-build
@@ -95,12 +101,22 @@ minibot32.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
+minibot32.hex: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objcopy  -O ihex $(EXECUTABLES) "minibot32.hex"
+	@echo 'Finished building: $@'
+	@echo ' '
+
+minibot32.bin: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "minibot32.bin"
+	@echo 'Finished building: $@'
+	@echo ' '
+
 # Other Targets
 clean:
-	-$(RM) default.size.stdout minibot32.elf minibot32.list minibot32.map
+	-$(RM) default.size.stdout minibot32.bin minibot32.elf minibot32.hex minibot32.list minibot32.map
 	-@echo ' '
 
-secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
+secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_HEX) $(OBJCOPY_BIN)
 
 fail-specified-linker-script-missing:
 	@echo 'Error: Cannot find the specified linker script. Check the linker settings in the build configuration.'

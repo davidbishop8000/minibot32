@@ -50,7 +50,7 @@ extern "C"
 ////////Control//////////
 #define START_MSG0 0x84
 #define START_MSG1 0x53
-#define WIFI_CONTROL_ID 0x64
+#define NET_CONTROL_ID 0x64
 
 #define MAX_TEMP 200.0
 
@@ -195,20 +195,40 @@ typedef struct {
 	uint8_t CS;
 } JobMsgTypeDef;
 
-enum WIFI_MSG_ID {
-	WIFI_NONE = 0,
-	WIFI_GET_STATUS = 1,
-	WIFI_SET_MANUAL_COM,
-	WIFI_GET_STM_CONFIG,
-	WIFI_SET_STM_CONFIG,
-	WIFI_SET_JOB,
-	WIFI_SET_HEATING,
-	WIFI_RESERV1,
-	WIFI_RESERV2,
-	WIFI_RESERV3,
-	WIFI_RESERV4,
-	WIFI_MSG_MAX,
+enum MSG_ID {
+	MSG_NONE = 0,
+	MSG_STATUS = 1,
+	MSG_CONTROL,
+	MSG_EMERGY_STOP,
+	MSG_MAX,
 };
+
+enum MOVE_COMM
+ {
+	MOVE_NONE = 0,
+	MOVE_POS_FB,		//left-right move
+	MOVE_POS_LR,		//back-forw move
+	MOVE_POS_FORK,		//fork move
+	MOVE_SERVO,
+	MOVE_ERROR,
+	MOVE_MAX,
+};
+
+typedef struct
+{
+	uint8_t start_msg0;
+	uint8_t start_msg1;
+	uint8_t msg_id;
+	uint8_t comm;
+	int32_t pos_fb;
+	int32_t pos_lr;
+	int32_t pos_fork;
+	int32_t pos_servo;
+	uint8_t r0;
+	uint8_t r1;
+	uint8_t r2;
+	uint8_t CS;
+} ContrlMsgTypeDef;
 
 enum LED_BLINK {
 	LEDB_POWER_ON = 1,
@@ -217,27 +237,6 @@ enum LED_BLINK {
 	LEDB_FLASH_OK,
 	LEDB_ERROR,
 	LEDB_MAX,
-};
-
-enum JOB_STATUS {
-	JOB_WAITING = 0,
-	JOB_START,
-	JOB_PAUSE,
-	JOB_RESUME,
-	JOB_COMPLETED,
-	JOB_STOP,
-	JOB_ERROR,
-	JOB_MAX,
-};
-
-enum MOVE_COMM {
-	MOVE_ZERO = 0,
-	MOVE_MOTOR_FB,
-	MOVE_MOTOR_LR,
-	MOVE_FORK,
-	MOVE_SERVO,
-	MOVE_ERROR,
-	MOVE_MAX,
 };
 
 enum SERVO_COMM {

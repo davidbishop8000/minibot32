@@ -25,6 +25,7 @@ public:
 	KeyaLKTechDriver(uint32_t extId, uint32_t axis);
 	KeyaLKTechDriver(uint32_t stdId);
 	uint8_t setSpeed(int32_t speed);
+	uint8_t setPos(int32_t pos);
 	void setEnc(int32_t pos);
 	void setTemp(int8_t temp);
 	uint8_t stop();

@@ -183,6 +183,18 @@ void KeyaLKTechDriver::setTemp(int8_t temp)
 	_temp = temp;
 }
 
+uint8_t KeyaLKTechDriver::setPos(int32_t pos)
+{
+	if (!_canTxHeader.ExtId)
+	{
+		KeyaLKTechDriver::readEnc();
+		//KeyaLKTechDriver::enable();
+		if (pos) {}
+	}
+
+	return 0;
+}
+
 void KeyaLKTechDriver::setEnc(int32_t enc)
 {
 	_enc = KeyaLKTechDriver::UnwrapEncoder(enc, &_prevEnc);
