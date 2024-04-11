@@ -23,7 +23,7 @@ extern "C"
 
 void StartUartWiFiTask(void *argument);
 
-void SendStatus();
+void sendStatus();
 void SetManual();
 void SetJob();
 void ConfigInit();

@@ -45,6 +45,9 @@ extern "C"
 
 #define DRIVERS_QUANT 4
 
+#define POS_TOLERANCE 100
+#define LK_MAX_SPEED 10000
+
 #define FLASH_INIT 0x44
 
 ////////Control//////////
@@ -164,24 +167,6 @@ typedef struct {
 	uint8_t start_msg1;
 	uint8_t control_id;
 	uint8_t msg_id;
-	float temp1;
-	float temp2;
-	float temp3;
-	SensorsTypeDef sens;
-	ErrorMsgTypeDef error;
-	uint32_t cycles_count;
-	uint32_t cycles_set;
-	uint8_t status;
-	uint8_t cs_errors;
-	uint8_t reserv1;
-	uint8_t CS;
-} StatusMsgTypeDef;
-
-typedef struct {
-	uint8_t start_msg0;
-	uint8_t start_msg1;
-	uint8_t control_id;
-	uint8_t msg_id;
 	uint8_t comm;
 	uint8_t c1;
 	uint8_t c2;
@@ -229,6 +214,22 @@ typedef struct
 	uint8_t r2;
 	uint8_t CS;
 } ContrlMsgTypeDef;
+
+typedef struct
+{
+	uint8_t start_msg0;
+	uint8_t start_msg1;
+	uint8_t msg_id;
+	uint8_t comm;
+	int32_t pos_fb;
+	int32_t pos_lr;
+	int32_t pos_fork;
+	int32_t pos_servo;
+	uint8_t r0;
+	uint8_t r1;
+	uint8_t r2;
+	uint8_t CS;
+} StatusMsgTypeDef;
 
 enum LED_BLINK {
 	LEDB_POWER_ON = 1,

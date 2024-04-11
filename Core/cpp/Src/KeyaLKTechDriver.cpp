@@ -80,8 +80,14 @@ uint8_t KeyaLKTechDriver::stop()
 		_canData[6] = 0x00;
 		_canData[7] = 0x00;
 	}
-
+	_speed = 0;
 	return KeyaLKTechDriver::sendData();
+}
+uint8_t KeyaLKTechDriver::stopHold()
+{
+	_speed = 0;
+	KeyaLKTechDriver::setSpeed(_speed);
+	return 0;
 }
 
 uint8_t KeyaLKTechDriver::enable()
@@ -173,6 +179,11 @@ int32_t KeyaLKTechDriver::getPos()
 	return _enc;
 }
 
+int32_t KeyaLKTechDriver::getSpeed()
+{
+	return _speed;
+}
+
 int8_t KeyaLKTechDriver::getTemp()
 {
 	return _temp;
@@ -183,21 +194,40 @@ void KeyaLKTechDriver::setTemp(int8_t temp)
 	_temp = temp;
 }
 
+void KeyaLKTechDriver::setOffset()
+{
+	_enc_offset = _enc;
+}
+
 uint8_t KeyaLKTechDriver::setPos(int32_t pos)
 {
 	if (!_canTxHeader.ExtId)
 	{
 		KeyaLKTechDriver::readEnc();
+		osDelay(5);
 		//KeyaLKTechDriver::enable();
-		if (pos) {}
+		if (pos < _enc - POS_TOLERANCE)
+		{
+			_speed = -LK_MAX_SPEED;
+			KeyaLKTechDriver::setSpeed(_speed);
+		}
+		else if (pos > _enc + POS_TOLERANCE)
+		{
+			_speed = LK_MAX_SPEED;
+			KeyaLKTechDriver::setSpeed(_speed);
+		}
+		else
+		{
+			KeyaLKTechDriver::stop();
+		}
+		osDelay(5);
 	}
-
 	return 0;
 }
 
 void KeyaLKTechDriver::setEnc(int32_t enc)
 {
-	_enc = KeyaLKTechDriver::UnwrapEncoder(enc, &_prevEnc);
+	_enc = KeyaLKTechDriver::UnwrapEncoder(enc, &_prevEnc) - _enc_offset;
 }
 
 int32_t KeyaLKTechDriver::UnwrapEncoder(uint16_t in, int32_t *prev)

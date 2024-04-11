@@ -28,11 +28,14 @@ public:
 	uint8_t setPos(int32_t pos);
 	void setEnc(int32_t pos);
 	void setTemp(int8_t temp);
+	void setOffset();
 	uint8_t stop();
+	uint8_t stopHold();
 	uint8_t enable();
 	uint8_t disable();
 	uint8_t readEnc();
 	int32_t getPos();
+	int32_t getSpeed();
 	uint32_t getId();
 	int8_t getTemp();
 	int32_t UnwrapEncoder(uint16_t in, int32_t *prev);
@@ -44,6 +47,7 @@ private:
 	uint32_t _axis;
 	int32_t _speed;
 	int32_t _enc;
+	int32_t _enc_offset = 0;
 	int32_t _prevEnc;
 	int8_t _temp;
 };

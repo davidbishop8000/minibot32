@@ -21,8 +21,6 @@ extern GlobDataTypeDef globData;
 extern UART_HandleTypeDef WIFI_UART;
 extern DMA_HandleTypeDef WIFI_UART_DMA;
 
-char ns_str[30];
-float velocity = 20.0;
 volatile uint8_t NewCanMsg = 0;
 CAN_TxHeaderTypeDef TxHeader;
 CAN_RxHeaderTypeDef RxHeader;

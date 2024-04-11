@@ -9,6 +9,6 @@
 
 void DriversObjectInit(KeyaLKTechDriver *drivers[], uint32_t size)
 {
-	//*drivers[0];
+
 }
 

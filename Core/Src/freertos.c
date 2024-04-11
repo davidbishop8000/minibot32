@@ -59,6 +59,7 @@ typedef StaticTask_t osStaticThreadDef_t;
 GlobDataTypeDef globData;
 MinibotConfigTypeDef minibotConfig;
 ContrlMsgTypeDef contrlMsg;
+StatusMsgTypeDef statusMsg;
 
 /* USER CODE END Variables */
 /* Definitions for defaultTask */

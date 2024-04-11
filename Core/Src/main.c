@@ -111,12 +111,14 @@ int main(void)
   MX_CAN1_Init();
   /* USER CODE BEGIN 2 */
   HAL_Delay(2500);
-  HAL_UARTEx_ReceiveToIdle_DMA(&RC_UART, rc_uart_buff, sizeof(rc_uart_buff));
-  HAL_UARTEx_ReceiveToIdle_DMA(&BMS_UART, bms_uart_buff, sizeof(bms_uart_buff));
   HAL_UARTEx_ReceiveToIdle_DMA(&WIFI_UART, wifi_uart_buff, sizeof(wifi_uart_buff));
-  __HAL_DMA_DISABLE_IT(&RC_UART_DMA, DMA_IT_HT);
-  __HAL_DMA_DISABLE_IT(&BMS_UART_DMA, DMA_IT_HT);
+  HAL_UARTEx_ReceiveToIdle_DMA(&BMS_UART, bms_uart_buff, sizeof(bms_uart_buff));
+  HAL_UARTEx_ReceiveToIdle_DMA(&RC_UART, rc_uart_buff, sizeof(rc_uart_buff));
+
   __HAL_DMA_DISABLE_IT(&WIFI_UART_DMA, DMA_IT_HT);
+  __HAL_DMA_DISABLE_IT(&BMS_UART_DMA, DMA_IT_HT);
+  __HAL_DMA_DISABLE_IT(&RC_UART_DMA, DMA_IT_HT);
+
   HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_ALL);
   HAL_IWDG_Refresh(&hiwdg);
   /* USER CODE END 2 */

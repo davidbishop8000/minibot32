@@ -79,14 +79,30 @@ void StartCanDriversTask(void *argument)
 		globData.LKEncoder = DriverFB.getPos();
 		globData.LKTemp = DriverFB.getTemp();
 		*/
+		//DriverFB.setPos(20000);
+		//DriverFB.setSpeed(-3000);
+		//osDelay(5000);
+		//DriverFB.stop();
+		DriverFB.readEnc();
 		command = (MOVE_COMM)contrlMsg.comm;
 		if (command != MOVE_NONE)
 		{
 			if (command == MOVE_POS_FB)
 			{
-				DriverFB.readEnc();
-				globData.LKEncoder = DriverFB.getPos();
-				globData.LKTemp = DriverFB.getTemp();
+				DriverFB.setPos(contrlMsg.pos_fb);
+				if (DriverFB.getSpeed() == 0)
+				{
+					DriverLR.stop();
+				}
+				else
+				{
+					DriverLR.setSpeed(-DriverFB.getSpeed());
+				}
+				//DriverFB.setSpeed(contrlMsg.pos_fb);
+			}
+			if (command == MOVE_POS_LR)
+			{
+				DriverLR.setPos(contrlMsg.pos_lr);
 			}
 			else if (command == MOVE_SERVO)
 			{
