@@ -38,15 +38,18 @@ extern "C"
 
 #define DRIVER1_LKTECH_ID 0x01
 #define DRIVER2_LKTECH_ID 0x02
-#define DRIVER3_LKTECH_ID 0x03
-#define DRIVER4_LKTECH_ID 0x04
 
-#define DRIVER_KEYA_ID 0x05
+#define DRIVER_KEYA_ID 0x01
 
 #define DRIVERS_QUANT 4
 
-#define POS_TOLERANCE 100
-#define LK_MAX_SPEED 10000
+#define POS_TOLERANCE 50
+#define LK_MAX_SPEED 100000
+#define LK_MIN_SPEED 2000
+#define KEYA_MAX_SPEED 6000
+#define KEYA_MIN_SPEED 1000
+#define X_WHEEL_RATIO 1
+#define Y_WHEEL_RATIO 1
 
 #define FLASH_INIT 0x44
 
@@ -104,15 +107,15 @@ typedef struct {
 typedef struct {
 	unsigned char limit_sw1				:1;
 	unsigned char limit_sw2				:1;
-	unsigned char button_manual_mode	:1;
-	unsigned char button_motor1_forw	:1;
-	unsigned char button_motor1_back	:1;
-	unsigned char button_motor2_forw	:1;
-	unsigned char button_motor2_back	:1;
-	unsigned char button_start			:1;
-	unsigned char button_pause			:1;
-	unsigned char button_stop			:1;
-	unsigned char button8				:1;
+	unsigned char limit_platform_up		:1;
+	unsigned char limit_platform_down	:1;
+	unsigned char limit_servo_open		:1;
+	unsigned char limit_servo_close		:1;
+	unsigned char lim0					:1;
+	unsigned char lim1					:1;
+	unsigned char lim2					:1;
+	unsigned char lim3					:1;
+	unsigned char lim4					:1;
 	unsigned char r0					:1;
 	unsigned char r1					:1;
 	unsigned char r2					:1;
@@ -146,55 +149,28 @@ typedef struct {
 	uint8_t current_comm;
 	uint8_t cs_err;
 	uint8_t LEDB;
-	float temp1;
-	float temp2;
-	float temp3;
-	uint32_t heat_on;
-	uint32_t heating_ok;
 	SensorsTypeDef sens;
 	ErrorMsgTypeDef error;
-	uint32_t cycles_count;
-	uint32_t cycles_set;
-	float volume;
-	uint32_t time_hold;
-	//uint16_t LKEncoder;
 	uint32_t LKEncoder;
+	int32_t enc_idle;
 	int8_t LKTemp;
 } GlobDataTypeDef;
-
-typedef struct {
-	uint8_t start_msg0;
-	uint8_t start_msg1;
-	uint8_t control_id;
-	uint8_t msg_id;
-	uint8_t comm;
-	uint8_t c1;
-	uint8_t c2;
-	uint8_t c3;
-	float volume;
-	uint32_t time_hold;
-	uint32_t cycles;
-	uint8_t r0;
-	uint8_t r1;
-	uint8_t r2;
-	uint8_t CS;
-} JobMsgTypeDef;
 
 enum MSG_ID {
 	MSG_NONE = 0,
 	MSG_STATUS = 1,
 	MSG_CONTROL,
-	MSG_EMERGY_STOP,
 	MSG_MAX,
 };
 
 enum MOVE_COMM
  {
 	MOVE_NONE = 0,
-	MOVE_POS_FB,		//left-right move
-	MOVE_POS_LR,		//back-forw move
-	MOVE_POS_FORK,		//fork move
+	MOVE_POS_X,		//left-right move
+	MOVE_POS_Y,		//back-forw move
+	MOVE_POS_FORK,	//fork move
 	MOVE_SERVO,
+	MOVE_EMERGY_STOP,
 	MOVE_ERROR,
 	MOVE_MAX,
 };
@@ -205,13 +181,13 @@ typedef struct
 	uint8_t start_msg1;
 	uint8_t msg_id;
 	uint8_t comm;
-	int32_t pos_fb;
-	int32_t pos_lr;
+	int32_t pos_x;
+	int32_t pos_y;
 	int32_t pos_fork;
 	int32_t pos_servo;
+	uint8_t x_hold;
+	uint8_t y_hold;
 	uint8_t r0;
-	uint8_t r1;
-	uint8_t r2;
 	uint8_t CS;
 } ContrlMsgTypeDef;
 
@@ -221,13 +197,16 @@ typedef struct
 	uint8_t start_msg1;
 	uint8_t msg_id;
 	uint8_t comm;
-	int32_t pos_fb;
-	int32_t pos_lr;
+	int32_t pos_x;
+	int32_t pos_y;
 	int32_t pos_fork;
 	int32_t pos_servo;
+	int32_t msg_count;
+	SensorsTypeDef sens;
+	ErrorMsgTypeDef error;
+	uint8_t x_hold;
+	uint8_t y_hold;
 	uint8_t r0;
-	uint8_t r1;
-	uint8_t r2;
 	uint8_t CS;
 } StatusMsgTypeDef;
 

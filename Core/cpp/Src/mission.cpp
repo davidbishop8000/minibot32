@@ -14,6 +14,6 @@ void StartMissionsTask(void *argument)
 
 	for(;;)
 	{
-
+		osDelay(1000);
 	}
 }

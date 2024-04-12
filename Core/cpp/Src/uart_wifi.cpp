@@ -10,6 +10,8 @@
 #include "minibot_config.h"
 #include "flash_data.h"
 #include "KeyaLKTechDriver.h"
+#include "servo_control.h"
+#include "Servo.h"
 
 #include <stdio.h> //for test
 
@@ -25,6 +27,7 @@ extern DMA_HandleTypeDef WIFI_UART_DMA;
 extern GlobDataTypeDef globData;
 extern MinibotConfigTypeDef minibotConfig;
 extern KeyaLKTechDriver *mdrivers[DRIVERS_QUANT];
+extern Servo *servo[2];
 
 extern ContrlMsgTypeDef contrlMsg;
 extern StatusMsgTypeDef statusMsg;
@@ -80,7 +83,7 @@ void StartUartWiFiTask(void *argument)
 		//sprintf((char*)str, (char*)"e: %d, t: %d\n\r", globData.LKEncoder, globData.LKTemp);
 		//HAL_UART_Transmit(&huart1, str, strlen((char *)str), 100);
 		//HAL_UART_Transmit(&WIFI_UART, (uint8_t*)"WIFI ok", 7, 100);
-		osDelay(1);
+		osDelay(2);
 	}
 }
 
@@ -89,11 +92,11 @@ void sendStatus()
 	statusMsg.start_msg0 = START_MSG0;
 	statusMsg.start_msg1 = START_MSG1;
 	statusMsg.msg_id = MSG_STATUS;
-	statusMsg.pos_fb = mdrivers[0]->getPos();
-	statusMsg.pos_lr = mdrivers[1]->getPos();;
+	statusMsg.pos_x = mdrivers[0]->getPos();
+	statusMsg.pos_y = mdrivers[1]->getPos();
 	statusMsg.pos_fork += 2;
-	statusMsg.pos_servo += 3;
-
+	statusMsg.pos_servo = servo[0]->getAngle();
+	statusMsg.msg_count++;
 	statusMsg.CS = calculateCS((uint8_t *)&statusMsg, sizeof(statusMsg)-1);
 	HAL_UART_Transmit(&WIFI_UART, (uint8_t*)&statusMsg, sizeof(statusMsg), 100);
 }

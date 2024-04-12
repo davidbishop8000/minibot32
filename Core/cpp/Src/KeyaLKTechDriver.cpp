@@ -7,7 +7,7 @@
 
 #include <KeyaLKTechDriver.h>
 
-KeyaLKTechDriver::KeyaLKTechDriver(uint32_t extId, uint32_t axis, uint32_t stdId = 0)
+KeyaLKTechDriver::KeyaLKTechDriver(uint32_t extId, uint32_t axis, uint32_t stdId, GlobDataTypeDef &globData) : _globData{globData}
 {
 	_axis = axis;
 	_canTxHeader.ExtId = extId;
@@ -23,12 +23,15 @@ KeyaLKTechDriver::KeyaLKTechDriver(uint32_t extId, uint32_t axis, uint32_t stdId
 	{
 		_canTxHeader.IDE = CAN_ID_STD;
 	}
+	_globData = globData;
 }
-KeyaLKTechDriver::KeyaLKTechDriver(uint32_t extId, uint32_t axis) : KeyaLKTechDriver::KeyaLKTechDriver(extId, axis, 0){}
-KeyaLKTechDriver::KeyaLKTechDriver(uint32_t stdId) : KeyaLKTechDriver::KeyaLKTechDriver(0, 0, stdId){}
+KeyaLKTechDriver::KeyaLKTechDriver(uint32_t extId, uint32_t axis, GlobDataTypeDef &globData) : KeyaLKTechDriver::KeyaLKTechDriver(extId, axis, 0, globData){}
+KeyaLKTechDriver::KeyaLKTechDriver(uint32_t stdId, GlobDataTypeDef &globData) : KeyaLKTechDriver::KeyaLKTechDriver(0, 0, stdId, globData){}
 
 uint8_t KeyaLKTechDriver::setSpeed(int32_t speed)
 {
+	if (!_enabled) KeyaLKTechDriver::enable();
+	osDelay(2);
 	if (_axis)
 	{
 		_canData[0] = 0x23;
@@ -111,7 +114,7 @@ uint8_t KeyaLKTechDriver::enable()
 		_canData[6] = 0x00;
 		_canData[7] = 0x00;
 	}
-
+	_enabled = 1;
 	return KeyaLKTechDriver::sendData();
 }
 
@@ -136,7 +139,7 @@ uint8_t KeyaLKTechDriver::disable()
 		_canData[6] = 0x00;
 		_canData[7] = 0x00;
 	}
-
+	_enabled = 0;
 	return KeyaLKTechDriver::sendData();
 }
 
@@ -174,6 +177,30 @@ uint8_t KeyaLKTechDriver::readEnc()
 	return CanMsgSend(&_canTxHeader, _canData);
 }
 
+uint8_t KeyaLKTechDriver::resetError()
+{
+	if (_axis) {
+//		_canData[0] = 0x23;
+//		_canData[1] = 0x0C;
+//		_canData[2] = 0x20;
+//		_canData[3] = _axis;
+//		_canData[4] = 0x00;
+//		_canData[5] = 0x00;
+//		_canData[6] = 0x00;
+//		_canData[7] = 0x00;
+	} else {
+		_canData[0] = 0x9B;
+		_canData[1] = 0x00;
+		_canData[2] = 0x00;
+		_canData[3] = 0x00;
+		_canData[4] = 0x00;
+		_canData[5] = 0x00;
+		_canData[6] = 0x00;
+		_canData[7] = 0x00;
+	}
+	return CanMsgSend(&_canTxHeader, _canData);
+}
+
 int32_t KeyaLKTechDriver::getPos()
 {
 	return _enc;
@@ -189,9 +216,19 @@ int8_t KeyaLKTechDriver::getTemp()
 	return _temp;
 }
 
+int8_t KeyaLKTechDriver::getHolding()
+{
+	return _holding;
+}
+
 void KeyaLKTechDriver::setTemp(int8_t temp)
 {
 	_temp = temp;
+}
+
+void KeyaLKTechDriver::setHolding(int8_t hold)
+{
+	_holding = hold;
 }
 
 void KeyaLKTechDriver::setOffset()
@@ -203,9 +240,45 @@ uint8_t KeyaLKTechDriver::setPos(int32_t pos)
 {
 	if (!_canTxHeader.ExtId)
 	{
-		KeyaLKTechDriver::readEnc();
-		osDelay(5);
+		//KeyaLKTechDriver::readEnc();
+		//osDelay(5);
 		//KeyaLKTechDriver::enable();
+		if (pos < _enc - POS_TOLERANCE)
+		{
+			int32_t diff = _enc - pos;
+			if (diff > LK_MAX_SPEED)
+			{
+				_speed = -LK_MAX_SPEED;
+			}
+			else
+			{
+				_speed = -diff;
+				if (_speed > -LK_MIN_SPEED) _speed = -LK_MIN_SPEED;
+			}
+			KeyaLKTechDriver::setSpeed(_speed);
+		}
+		else if (pos > _enc + POS_TOLERANCE)
+		{
+			int32_t diff = pos - _enc;
+			if (diff > LK_MAX_SPEED)
+			{
+				_speed = LK_MAX_SPEED;
+			}
+			else
+			{
+				_speed = diff;
+				if (_speed < LK_MIN_SPEED) _speed = LK_MIN_SPEED;
+			}
+			KeyaLKTechDriver::setSpeed(_speed);
+		}
+		else
+		{
+			KeyaLKTechDriver::stop();
+		}
+		osDelay(2);
+	}
+	else
+	{
 		if (pos < _enc - POS_TOLERANCE)
 		{
 			_speed = -LK_MAX_SPEED;
@@ -220,14 +293,18 @@ uint8_t KeyaLKTechDriver::setPos(int32_t pos)
 		{
 			KeyaLKTechDriver::stop();
 		}
-		osDelay(5);
+		osDelay(2);
 	}
 	return 0;
 }
 
 void KeyaLKTechDriver::setEnc(int32_t enc)
 {
-	_enc = KeyaLKTechDriver::UnwrapEncoder(enc, &_prevEnc) - _enc_offset;
+	if (!_canTxHeader.ExtId)
+	{
+		_enc = KeyaLKTechDriver::UnwrapEncoder(enc, &_prevEnc) - _enc_offset;
+	}
+	else _enc = enc;
 }
 
 int32_t KeyaLKTechDriver::UnwrapEncoder(uint16_t in, int32_t *prev)

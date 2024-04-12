@@ -1,3 +1,5 @@
-../Core/cpp/Src/drivers_control.cpp:23:6:void StartCanDriversTask(void*)	40	static
-../Core/cpp/Src/drivers_control.cpp:123:1:void __static_initialization_and_destruction_0(int, int)	16	static
-../Core/cpp/Src/drivers_control.cpp:123:1:cpp)	8	static
+../Core/cpp/Src/drivers_control.cpp:24:6:void StartCanDriversTask(void*)	24	static
+../Core/cpp/Src/drivers_control.cpp:64:6:void driversInit()	8	static
+../Core/cpp/Src/drivers_control.cpp:81:6:void driversStop()	8	static
+../Core/cpp/Src/drivers_control.cpp:89:1:void __static_initialization_and_destruction_0(int, int)	16	static
+../Core/cpp/Src/drivers_control.cpp:89:1:cpp)	8	static

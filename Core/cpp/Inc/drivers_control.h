@@ -23,6 +23,8 @@ extern "C"
 #define COLLISION_MAX_DIMM 3
 
 void StartCanDriversTask(void *argument);
+void driversInit();
+void driversStop();
 
 #ifdef __cplusplus
 }

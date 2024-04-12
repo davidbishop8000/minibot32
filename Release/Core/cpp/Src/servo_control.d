@@ -31,7 +31,8 @@ Core/cpp/Src/servo_control.o: ../Core/cpp/Src/servo_control.cpp \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h \
- C:/ST_proj/minibot32/Core/cpp/Inc/minibot_config.h
+ C:/ST_proj/minibot32/Core/cpp/Inc/minibot_config.h \
+ C:/ST_proj/minibot32/Core/cpp/Inc/Servo.h
 C:/ST_proj/minibot32/Core/cpp/Inc/servo_control.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
@@ -66,3 +67,4 @@ C:/ST_proj/minibot32/Core/cpp/Inc/servo_control.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h:
 C:/ST_proj/minibot32/Core/cpp/Inc/minibot_config.h:
+C:/ST_proj/minibot32/Core/cpp/Inc/Servo.h:
