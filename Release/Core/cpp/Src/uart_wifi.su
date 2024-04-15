@@ -1,6 +1,7 @@
-../Core/cpp/Src/uart_wifi.cpp:43:6:void StartUartWiFiTask(void*)	32	static
-../Core/cpp/Src/uart_wifi.cpp:90:6:void sendStatus()	8	static
-../Core/cpp/Src/uart_wifi.cpp:104:6:void SetManual()	4	static
-../Core/cpp/Src/uart_wifi.cpp:109:9:uint8_t calculateCS(uint8_t*, int)	24	static
-../Core/cpp/Src/uart_wifi.cpp:118:6:void HAL_UART_ErrorCallback(UART_HandleTypeDef*)	40	static
-../Core/cpp/Src/uart_wifi.cpp:164:6:void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef*, uint16_t)	16	static
+../Core/cpp/Src/uart_wifi.cpp:55:6:void StartUartWiFiTask(void*)	32	static
+../Core/cpp/Src/uart_wifi.cpp:131:6:void sendStatus()	8	static
+../Core/cpp/Src/uart_wifi.cpp:148:6:void SetManual()	4	static
+../Core/cpp/Src/uart_wifi.cpp:153:6:void rcGetBattery()	16	static
+../Core/cpp/Src/uart_wifi.cpp:316:9:uint8_t calculateCS(uint8_t*, int)	24	static
+../Core/cpp/Src/uart_wifi.cpp:325:6:void HAL_UART_ErrorCallback(UART_HandleTypeDef*)	40	static
+../Core/cpp/Src/uart_wifi.cpp:371:6:void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef*, uint16_t)	16	static

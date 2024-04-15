@@ -1,7 +1,7 @@
 /*
  * servo_control.cpp
  *
- *  Created on: May 5, 2023
+ *  Created on: March 5, 2024
  *      Author: USER
  */
 
@@ -27,6 +27,9 @@ void StartServoTask(void *argument)
 		if (command == MOVE_SERVO) {
 			servo1.setAngle(contrlMsg.pos_servo);
 			servo2.setAngle(contrlMsg.pos_servo);
+			osDelay(800);
+			servo1.disable();
+			servo2.disable();
 			contrlMsg.comm = 0;
 		}
 		osDelay(10);

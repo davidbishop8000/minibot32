@@ -15,12 +15,15 @@ Servo::Servo(TIM_HandleTypeDef *htim, uint32_t timChannel)
 uint8_t Servo::setAngle(int32_t angle)
 {
 	HAL_TIM_PWM_Start(_htim, _timChannel);
-	TIM3->CCR1 = Servo::map(angle, SERVO_MIN_ANGLE, SERVO_MAX_ANGLE, SERVO_MIN_W, SERVO_MAX_W);
-	//uint32_t comp = Servo::map(angle, SERVO_MIN_ANGLE, SERVO_MAX_ANGLE, SERVO_MIN_W, SERVO_MAX_W);
-	//__HAL_TIM_SET_COMPARE(_htim, _timChannel, comp);
+	uint32_t angl = Servo::map(angle, SERVO_MIN_ANGLE, SERVO_MAX_ANGLE, SERVO_MIN_W, SERVO_MAX_W);
+//	if (_timChannel == TIM_CHANNEL_1) _htim->CCR1 = angl;
+//	else if (_timChannel == TIM_CHANNEL_2) _htim->CCR2 = angl;
+//	else if (_timChannel == TIM_CHANNEL_3) _htim->CCR3 = angl;
+//	else if (_timChannel == TIM_CHANNEL_4) _htim->CCR4 = angl;
+	__HAL_TIM_SET_COMPARE(_htim, _timChannel, angl);
 	_angle = angle;
-	osDelay(800);
-	HAL_TIM_PWM_Stop(_htim, _timChannel);
+	//osDelay(800);
+	//HAL_TIM_PWM_Stop(_htim, _timChannel);
 	return 1;
 }
 

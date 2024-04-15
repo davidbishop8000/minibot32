@@ -31,18 +31,69 @@ void StartOutputsTask(void *argument)
 
 void SetOutputs()
 {
-	Y21_ON;
-	osDelay(100);
-	Y22_ON;
-	osDelay(20);
-	Y21_OFF;
-	osDelay(100);
-	Y23_ON;
-	osDelay(20);
-	Y22_OFF;
-	osDelay(100);
-	Y23_OFF;
-	osDelay(300);
+	if (contrlMsg.comm == MOVE_LIFT)
+	{
+		if (contrlMsg.pos_lift == 1 && globData.sens.limit_platform_up == 0)
+		{
+			Y01_ON;
+			Y02_OFF;
+		}
+		else
+		{
+			Y01_OFF;
+			contrlMsg.comm = 0;
+		}
+		if (contrlMsg.pos_lift == 2 && globData.sens.limit_platform_down == 0)
+		{
+			Y01_OFF;
+			Y02_ON;
+		}
+		else
+		{
+			Y02_OFF;
+			contrlMsg.comm = 0;
+		}
+	}
+	else if (!*(uint16_t*)&globData.error) {
+		Y21_ON;
+		osDelay(100);
+		Y22_ON;
+		osDelay(20);
+		Y21_OFF;
+		osDelay(100);
+		Y23_ON;
+		osDelay(20);
+		Y22_OFF;
+		osDelay(100);
+		Y23_OFF;
+		osDelay(300);
+	}
+	else
+	{
+		Y16_ON;
+		osDelay(100);
+		Y17_ON;
+		osDelay(20);
+		Y16_OFF;
+		osDelay(100);
+		Y18_ON;
+		osDelay(20);
+		Y17_OFF;
+		osDelay(100);
+		Y18_OFF;
+		osDelay(30);
+		for (int32_t i=20; i>0; i--)
+		{
+			Y19_OFF;
+			Y20_ON;
+			osDelay(2*i);
+			Y19_ON;
+			Y20_OFF;
+			osDelay(2*i);
+		}
+		Y19_OFF;
+		osDelay(500);
+	}
 }
 
 void LedBlink() {

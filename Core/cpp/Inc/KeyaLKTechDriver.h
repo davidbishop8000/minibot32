@@ -30,17 +30,21 @@ public:
 	void setTemp(int8_t temp);
 	void setOffset();
 	void setHolding(int8_t hold);
+	void setError(int8_t error);
 	uint8_t stop();
 	uint8_t stopHold();
 	uint8_t enable();
 	uint8_t disable();
 	uint8_t readEnc();
+	uint8_t readError();
 	uint8_t resetError();
 	int32_t getPos();
 	int32_t getSpeed();
 	uint32_t getId();
 	int8_t getTemp();
+	int8_t getError();
 	int8_t getHolding();
+	int32_t _error_count{};
 
 private:
 	int32_t UnwrapEncoder(uint16_t in, int32_t *prev);
@@ -55,6 +59,7 @@ private:
 	int8_t _temp{};
 	int8_t _holding{};
 	int8_t _enabled{};
+	int8_t _error{};
 	GlobDataTypeDef &_globData;
 };
 

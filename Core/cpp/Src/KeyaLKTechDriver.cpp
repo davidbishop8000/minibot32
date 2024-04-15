@@ -177,6 +177,30 @@ uint8_t KeyaLKTechDriver::readEnc()
 	return CanMsgSend(&_canTxHeader, _canData);
 }
 
+uint8_t KeyaLKTechDriver::readError()
+{
+	if (_axis) {
+//		_canData[0] = 0x23;
+//		_canData[1] = 0x0C;
+//		_canData[2] = 0x20;
+//		_canData[3] = _axis;
+//		_canData[4] = 0x00;
+//		_canData[5] = 0x00;
+//		_canData[6] = 0x00;
+//		_canData[7] = 0x00;
+	} else {
+		_canData[0] = 0x9A;
+		_canData[1] = 0x00;
+		_canData[2] = 0x00;
+		_canData[3] = 0x00;
+		_canData[4] = 0x00;
+		_canData[5] = 0x00;
+		_canData[6] = 0x00;
+		_canData[7] = 0x00;
+	}
+	return CanMsgSend(&_canTxHeader, _canData);
+}
+
 uint8_t KeyaLKTechDriver::resetError()
 {
 	if (_axis) {
@@ -216,6 +240,11 @@ int8_t KeyaLKTechDriver::getTemp()
 	return _temp;
 }
 
+int8_t KeyaLKTechDriver::getError()
+{
+	return _error;
+}
+
 int8_t KeyaLKTechDriver::getHolding()
 {
 	return _holding;
@@ -224,6 +253,11 @@ int8_t KeyaLKTechDriver::getHolding()
 void KeyaLKTechDriver::setTemp(int8_t temp)
 {
 	_temp = temp;
+}
+
+void KeyaLKTechDriver::setError(int8_t error)
+{
+	_error = error;
 }
 
 void KeyaLKTechDriver::setHolding(int8_t hold)

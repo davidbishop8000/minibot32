@@ -68,17 +68,39 @@ uint8_t CanMsgRead(CanDataRecvTypeDef *canDataRecv) {
 	NVIC_DisableIRQ(CAN1_RX0_IRQn);
 	if (RxHeader.IDE == CAN_STD_ID)
 	{
-		for (int i=0; i<DRIVERS_QUANT; i++)
+		for (int i=0; i<2; i++)
 		{
-			if (RxHeader.StdId == mdrivers[i]->getId() && RxData[0] == 0x9C) {
-				mdrivers[i]->setEnc(*(uint16_t*) &RxData[6]);
-				mdrivers[i]->setTemp(RxData[1]);
+			if (RxHeader.StdId == mdrivers[i]->getId()) {
+				if (RxData[0] == 0x9C)
+				{
+					mdrivers[i]->setEnc(*(uint16_t*) &RxData[6]);
+					mdrivers[i]->setTemp(RxData[1]);
+					mdrivers[i]->_error_count = 0;
+				}
+				else if (RxData[0] == 0x9A)
+				{
+					mdrivers[i]->setError(RxData[7]);
+				}
 			}
 		}
 	}
 	else
 	{
-
+		if (RxHeader.ExtId == 0x05800001) {
+			if (RxData[0] == 0x60)
+			{
+				mdrivers[2]->setTemp(RxData[6]);
+				mdrivers[3]->setTemp(RxData[7]);
+				mdrivers[2]->_error_count = 0;
+			}
+			else if (RxData[1] == 0x0D) {
+				//globData.voltage = RxData[7];
+			}
+			else if (RxData[1] == 0x12) {
+				//diagMsg.motor1 = *(DriverErrMsgTypeDef*)&RxData[4];
+				//diagMsg.motor2 = *(DriverErrMsgTypeDef*)&RxData[6];
+			}
+		}
 	}
 	/*//uint32_t drvId = DRIVER_MOVE_ID + 0x05800000;
 

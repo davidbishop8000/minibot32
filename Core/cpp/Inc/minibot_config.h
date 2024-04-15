@@ -60,6 +60,73 @@ extern "C"
 
 #define MAX_TEMP 200.0
 
+typedef struct {
+	uint8_t start_msg0;
+	uint8_t start_msg1;
+	uint8_t _id;
+	uint8_t msg_id;
+
+	uint16_t voltage;
+	int16_t current;
+
+	uint32_t remaining_capacity;
+	uint16_t nominal_capacity;
+	uint16_t n0;
+
+	uint16_t cycles;
+	uint16_t date;
+	uint16_t balance_low;
+	uint16_t balance_high;
+
+	uint16_t protection;
+	uint16_t capacity_percent;
+
+	uint8_t version;
+	uint8_t MOS_state;
+	uint8_t num_of_battery;
+	uint8_t num_of_NTC;
+
+	uint16_t temp1;
+	uint16_t temp2;
+
+	uint8_t battery_pack;
+	uint8_t p0;
+	uint8_t p1;
+	uint8_t p2;
+
+	uint16_t max_volt;
+	uint16_t min_volt;
+
+	uint16_t cell_0;
+	uint16_t cell_1;
+	uint16_t cell_2;
+	uint16_t cell_3;
+	uint16_t cell_4;
+	uint16_t cell_5;
+	uint16_t cell_6;
+	uint16_t cell_7;
+	uint16_t cell_8;
+	uint16_t cell_9;
+	uint16_t cell_10;
+	uint16_t cell_11;
+	uint16_t cell_12;
+	uint16_t cell_13;
+	uint16_t cell_14;
+	uint16_t cell_15;
+	uint8_t bms_type;
+	uint8_t reservz1;
+	uint8_t reservz2;
+	uint8_t CS;
+} BatteryMsgTypeDef;
+
+enum BMS_TYPE {
+	BMS_NONE = 0,
+	BMS_SMART,
+	BMS_JBD,
+	BMS_MAX,
+};
+
+
 typedef struct
 {
 	unsigned char ind : 1;
@@ -124,10 +191,10 @@ typedef struct {
 } SensorsTypeDef;
 
 typedef struct {
-	unsigned char err0  :1;
-	unsigned char err1  :1;
-	unsigned char err2  :1;
-	unsigned char err3  :1;
+	unsigned char driverX_err  :1;
+	unsigned char driverY_err  :1;
+	unsigned char driverF_err  :1;
+	unsigned char driverL_err  :1;
 	unsigned char err4  :1;
 	unsigned char err5  :1;
 	unsigned char err6  :1;
@@ -139,7 +206,7 @@ typedef struct {
 	unsigned char err12 :1;
 	unsigned char err13 :1;
 	unsigned char err14 :1;
-	unsigned char err15 :1;
+	unsigned char cs_err :1;
 } ErrorMsgTypeDef;
 
 typedef struct {
@@ -154,6 +221,7 @@ typedef struct {
 	uint32_t LKEncoder;
 	int32_t enc_idle;
 	int8_t LKTemp;
+	uint8_t capacity;
 } GlobDataTypeDef;
 
 enum MSG_ID {
@@ -170,6 +238,7 @@ enum MOVE_COMM
 	MOVE_POS_Y,		//back-forw move
 	MOVE_POS_FORK,	//fork move
 	MOVE_SERVO,
+	MOVE_LIFT,
 	MOVE_EMERGY_STOP,
 	MOVE_ERROR,
 	MOVE_MAX,
@@ -185,6 +254,7 @@ typedef struct
 	int32_t pos_y;
 	int32_t pos_fork;
 	int32_t pos_servo;
+	int32_t pos_lift;
 	uint8_t x_hold;
 	uint8_t y_hold;
 	uint8_t r0;
@@ -201,11 +271,17 @@ typedef struct
 	int32_t pos_y;
 	int32_t pos_fork;
 	int32_t pos_servo;
+	int32_t pos_lift;
+	int32_t status;
 	int32_t msg_count;
 	SensorsTypeDef sens;
 	ErrorMsgTypeDef error;
 	uint8_t x_hold;
 	uint8_t y_hold;
+	uint8_t capacity;
+	uint8_t r3;
+	uint8_t r2;
+	uint8_t r1;
 	uint8_t r0;
 	uint8_t CS;
 } StatusMsgTypeDef;

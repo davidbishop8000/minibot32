@@ -29,6 +29,7 @@ void SetJob();
 void ConfigInit();
 int ConfigUpdate();
 void GetSTMConfig();
+void rcGetBattery();
 uint8_t calculateCS(uint8_t *msg, int msg_size);
 
 #ifdef __cplusplus

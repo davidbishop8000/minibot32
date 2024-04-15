@@ -46,15 +46,35 @@ void StartCanDriversTask(void *argument)
 				{
 					driverX2.setSpeed(-driverX1.getSpeed());
 				}
-				//DriverFB.setSpeed(contrlMsg.pos_fb);
 			}
 			else if (command == MOVE_POS_Y)
 			{
-				//DriverY.setPos(contrlMsg.pos_y);
+				driverY1.setPos(contrlMsg.pos_y);
+			}
+			else if (command == MOVE_POS_FORK)
+			{
+				driverY2.setPos(contrlMsg.pos_fork);
 			}
 			if (command == MOVE_EMERGY_STOP)
 			{
 				driversStop();
+			}
+		}
+		else
+		{
+			driverX1.readError();
+			osDelay(2);
+			driverX2.readError();
+			osDelay(2);
+			if (driverX1.getError())
+			{
+				driverX1.resetError();
+				osDelay(2);
+			}
+			if (driverX2.getError())
+			{
+				driverX2.resetError();
+				osDelay(2);
 			}
 		}
 		osDelay(1);
