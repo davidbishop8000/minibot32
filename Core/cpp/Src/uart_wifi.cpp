@@ -82,6 +82,7 @@ void StartUartWiFiTask(void *argument)
 					else
 					{
 						memcpy(&contrlMsg, wifi_uart_buff, sizeof(ContrlMsgTypeDef));
+						checkData();
 						sendStatus();
 					}
 				}
@@ -113,20 +114,6 @@ void StartUartWiFiTask(void *argument)
 				bms_detected = 0;
 				batteryMsg.bms_type = BMS_NONE;
 			}
-			mdrivers[0]->_error_count++;
-			if (mdrivers[0]->_error_count > 3) globData.error.driverX_err = 1;
-			else globData.error.driverX_err = 0;
-			mdrivers[2]->_error_count++;
-			if (mdrivers[2]->_error_count > 3)
-			{
-				globData.error.driverY_err = 1;
-				globData.error.driverF_err = 1;
-			}
-			else
-			{
-				globData.error.driverY_err = 0;
-				globData.error.driverF_err = 0;
-			}
 		}
 	}
 }
@@ -136,6 +123,7 @@ void sendStatus()
 	statusMsg.start_msg0 = START_MSG0;
 	statusMsg.start_msg1 = START_MSG1;
 	statusMsg.msg_id = MSG_STATUS;
+	statusMsg.comm = globData.current_comm;
 	statusMsg.pos_x = mdrivers[0]->getPos();
 	statusMsg.pos_y = mdrivers[2]->getPos();
 	statusMsg.pos_fork = mdrivers[3]->getPos();;
@@ -146,6 +134,19 @@ void sendStatus()
 	statusMsg.msg_count++;
 	statusMsg.CS = calculateCS((uint8_t *)&statusMsg, sizeof(statusMsg)-1);
 	HAL_UART_Transmit(&WIFI_UART, (uint8_t*)&statusMsg, sizeof(statusMsg), 100);
+}
+
+void checkData()
+{
+	if (globData.current_comm == MOVE_NONE || contrlMsg.comm == MOVE_EMERGY_STOP)
+	{
+		globData.current_comm = contrlMsg.comm;
+	}
+	if (contrlMsg.comm == MOVE_RESET)
+	{
+		*(uint16_t*)&globData.error = 0;
+		globData.current_comm = MOVE_NONE;
+	}
 }
 
 void SetManual()

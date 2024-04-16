@@ -8,12 +8,6 @@
 #include "canbus.h"
 #include "InitCanDrivers.h"
 
-//extern CAN_TxHeaderTypeDef TxHeader;
-//extern CAN_RxHeaderTypeDef RxHeader;
-//extern uint8_t TxData[8];
-//extern uint8_t RxData[8];
-//extern uint32_t TxMailbox;
-
 extern UART_HandleTypeDef DEBUG_UART;
 extern CAN_HandleTypeDef hcan1;
 extern GlobDataTypeDef globData;
@@ -24,8 +18,8 @@ extern DMA_HandleTypeDef WIFI_UART_DMA;
 volatile uint8_t NewCanMsg = 0;
 CAN_TxHeaderTypeDef TxHeader;
 CAN_RxHeaderTypeDef RxHeader;
-uint8_t TxData[8] = { 0, };
-uint8_t RxData[8] = { 0, };
+uint8_t TxData[8] = {0, };
+uint8_t RxData[8] = {0, };
 uint32_t TxMailbox = 0;
 CanDataRecvTypeDef canDataRecv;
 CanDataSendTypeDef prevCanData;
@@ -39,24 +33,11 @@ extern KeyaLKTechDriver *mdrivers[DRIVERS_QUANT];
 void StartCanTask(void *argument) {
 	UNUSED(argument);
 	for (;;) {
-		static uint32_t err_count = 0;
 		if (NewCanMsg == CAN_GET_MSG_OK) {
 			NewCanMsg = CAN_GET_MSG_WAIT;
-			err_count = 0;
-			//globData.error.driver_conn = 0;
 			CanMsgRead(&canDataRecv);
 		}
 		else if (NewCanMsg == CAN_GET_MSG_ERROR) {
-			//HAL_UART_Transmit(&DEBUG_UART, (uint8_t*) "CAN error\r\n", 11, 100);
-			err_count++;
-			if (err_count > 20 && DEBUG_MODE == 0)
-			{
-				/*globData.error.driver_conn = 1;
-				globData.drv_cpu_temp = 0;
-				globData.motor1_temp = 0;
-				globData.motor2_temp = 0;
-				globData.voltage = 0;*/
-			}
 			NewCanMsg = CAN_GET_MSG_WAIT;
 		}
 		osDelay(1);
@@ -75,7 +56,7 @@ uint8_t CanMsgRead(CanDataRecvTypeDef *canDataRecv) {
 				{
 					mdrivers[i]->setEnc(*(uint16_t*) &RxData[6]);
 					mdrivers[i]->setTemp(RxData[1]);
-					mdrivers[i]->_error_count = 0;
+					mdrivers[i]->error_count = 0;
 				}
 				else if (RxData[0] == 0x9A)
 				{
@@ -91,7 +72,7 @@ uint8_t CanMsgRead(CanDataRecvTypeDef *canDataRecv) {
 			{
 				mdrivers[2]->setTemp(RxData[6]);
 				mdrivers[3]->setTemp(RxData[7]);
-				mdrivers[2]->_error_count = 0;
+				mdrivers[2]->error_count = 0;
 			}
 			else if (RxData[1] == 0x0D) {
 				//globData.voltage = RxData[7];
@@ -102,33 +83,6 @@ uint8_t CanMsgRead(CanDataRecvTypeDef *canDataRecv) {
 			}
 		}
 	}
-	/*//uint32_t drvId = DRIVER_MOVE_ID + 0x05800000;
-
-	//uint32_t drvId = DRIVER_MOVE_ID + 0x07000000;
-	if (RxHeader.ExtId == 0x05800001 && RxData[0] == 0x60) {
-		if (RxData[1] == 0x0F) {
-			globData.drv_cpu_temp = RxData[5];
-			globData.motor1_temp = RxData[6];
-			globData.motor2_temp = RxData[7];
-		}
-		else if (RxData[1] == 0x0D) {
-			globData.voltage = RxData[7];
-		}
-		else if (RxData[1] == 0x12) {
-			//RxData[4]; //data H fault of motor 1
-			//RxData[5]; //data L fault of motor 1
-			//RxData[6]; //data H fault of motor 2
-			//RxData[7]; //data L fault of motor 2
-			diagMsg.motor1 = *(DriverErrMsgTypeDef*)&RxData[4];
-			diagMsg.motor2 = *(DriverErrMsgTypeDef*)&RxData[6];
-		}
-	}*/
-
-
-
-	//HAL_UART_Transmit(&WIFI_UART, (uint8_t*) "get\r\n", 5, 100);
-	//HAL_UART_Transmit(&WIFI_UART, RxData, 8, 100);
-
 	NVIC_EnableIRQ(CAN1_RX0_IRQn);
 	return 1;
 }
@@ -140,7 +94,6 @@ uint8_t CanMsgSend(CAN_TxHeaderTypeDef *TxHeader, uint8_t canData[]) {
 	{
 		while (HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0);
 		if (HAL_CAN_AddTxMessage(&hcan1, TxHeader, canData, &TxMailbox) != HAL_OK) {
-			//HAL_UART_Transmit(&huart1, (uint8_t*) "no_trans\r\n", 10, 100);
 			return 0;
 		}
 	}

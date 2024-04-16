@@ -44,7 +44,7 @@ public:
 	int8_t getTemp();
 	int8_t getError();
 	int8_t getHolding();
-	int32_t _error_count{};
+	int32_t error_count{};
 
 private:
 	int32_t UnwrapEncoder(uint16_t in, int32_t *prev);

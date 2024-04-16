@@ -17,6 +17,7 @@ extern ContrlMsgTypeDef contrlMsg;
 
 //extern IWDG_HandleTypeDef hiwdg;
 
+uint32_t lift_check_timer = 0;
 
 void StartOutputsTask(void *argument)
 {
@@ -31,30 +32,41 @@ void StartOutputsTask(void *argument)
 
 void SetOutputs()
 {
-	if (contrlMsg.comm == MOVE_LIFT)
+	if (globData.current_comm == MOVE_LIFT && !globData.error.driverL_err)
 	{
 		if (contrlMsg.pos_lift == 1 && globData.sens.limit_platform_up == 0)
 		{
 			Y01_ON;
 			Y02_OFF;
+			lift_check_timer = HAL_GetTick();
 		}
 		else
 		{
 			Y01_OFF;
-			contrlMsg.comm = 0;
+			globData.current_comm = MOVE_NONE;
 		}
 		if (contrlMsg.pos_lift == 2 && globData.sens.limit_platform_down == 0)
 		{
 			Y01_OFF;
 			Y02_ON;
+			lift_check_timer = HAL_GetTick();
 		}
 		else
 		{
 			Y02_OFF;
-			contrlMsg.comm = 0;
+			globData.current_comm = MOVE_NONE;
+		}
+		if (HAL_GetTick() - lift_check_timer > 8000) {
+
+			globData.error.driverL_err = 1;
+			Y01_OFF;
+			Y02_OFF;
 		}
 	}
 	else if (!*(uint16_t*)&globData.error) {
+		Y01_OFF;
+		Y02_OFF;
+
 		Y21_ON;
 		osDelay(100);
 		Y22_ON;
@@ -70,6 +82,9 @@ void SetOutputs()
 	}
 	else
 	{
+		Y01_OFF;
+		Y02_OFF;
+
 		Y16_ON;
 		osDelay(100);
 		Y17_ON;

@@ -23,14 +23,14 @@ void StartServoTask(void *argument)
 	servo[1] = &servo2;
 	enum MOVE_COMM command;
 	for (;;) {
-		command = (MOVE_COMM) contrlMsg.comm;
+		command = (MOVE_COMM)globData.current_comm;
 		if (command == MOVE_SERVO) {
 			servo1.setAngle(contrlMsg.pos_servo);
 			servo2.setAngle(contrlMsg.pos_servo);
 			osDelay(800);
 			servo1.disable();
 			servo2.disable();
-			contrlMsg.comm = 0;
+			globData.current_comm = 0;
 		}
 		osDelay(10);
 	}
