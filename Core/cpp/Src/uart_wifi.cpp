@@ -81,14 +81,20 @@ void StartUartWiFiTask(void *argument)
 					}
 					else
 					{
-						memcpy(&contrlMsg, wifi_uart_buff, sizeof(ContrlMsgTypeDef));
+						if (globData.current_comm == MOVE_NONE || wifi_uart_buff[3] == MOVE_EMERGY_STOP || wifi_uart_buff[3] == MOVE_RESET)
+						{
+							memcpy(&contrlMsg, wifi_uart_buff, sizeof(ContrlMsgTypeDef));
+							globData.current_comm = contrlMsg.comm;
+						}
 						checkData();
 						sendStatus();
 					}
 				}
-				new_wifi_data = 0;
-				memset(wifi_uart_buff, 0, 100);
+
+				//memset(wifi_uart_buff, 0, 100);
 			}
+			else globData.cs_err++;
+			new_wifi_data = 0;
 			osDelay(2);
 		}
 		if (new_bms_data)
@@ -132,6 +138,7 @@ void sendStatus()
 	statusMsg.capacity = globData.capacity;
 	statusMsg.sens = globData.sens;
 	statusMsg.error = globData.error;
+	statusMsg.cs_err = globData.cs_err;
 	statusMsg.msg_count++;
 	statusMsg.CS = calculateCS((uint8_t *)&statusMsg, sizeof(statusMsg)-1);
 	HAL_UART_Transmit(&WIFI_UART, (uint8_t*)&statusMsg, sizeof(statusMsg), 100);
@@ -139,14 +146,10 @@ void sendStatus()
 
 void checkData()
 {
-	if (globData.current_comm == MOVE_NONE || contrlMsg.comm == MOVE_EMERGY_STOP)
-	{
-		globData.current_comm = contrlMsg.comm;
-	}
 	if (contrlMsg.comm == MOVE_RESET)
 	{
 		*(uint16_t*)&globData.error = 0;
-		globData.current_comm = MOVE_NONE;
+		globData.current_comm = MOVE_RESET;
 	}
 }
 

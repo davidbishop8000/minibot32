@@ -58,6 +58,7 @@ uint8_t KeyaLKTechDriver::setSpeed(int32_t speed)
 		_canData[6] = *((uint8_t *)(&speed)+2);
 		_canData[7] = *((uint8_t *)(&speed)+3);*/
 	}
+	_speed = speed;
 
 	return KeyaLKTechDriver::sendData();
 }
@@ -277,7 +278,7 @@ uint8_t KeyaLKTechDriver::setPos(int32_t pos)
 		//KeyaLKTechDriver::readEnc();
 		//osDelay(5);
 		//KeyaLKTechDriver::enable();
-		if (pos < _enc - POS_TOLERANCE)
+		if (pos < _enc - POS_X_TOLERANCE)
 		{
 			int32_t diff = _enc - pos;
 			if (diff > LK_MAX_SPEED)
@@ -291,7 +292,7 @@ uint8_t KeyaLKTechDriver::setPos(int32_t pos)
 			}
 			KeyaLKTechDriver::setSpeed(_speed);
 		}
-		else if (pos > _enc + POS_TOLERANCE)
+		else if (pos > _enc + POS_X_TOLERANCE)
 		{
 			int32_t diff = pos - _enc;
 			if (diff > LK_MAX_SPEED)
@@ -307,13 +308,14 @@ uint8_t KeyaLKTechDriver::setPos(int32_t pos)
 		}
 		else
 		{
-			KeyaLKTechDriver::stop();
+			//KeyaLKTechDriver::stop();
+			KeyaLKTechDriver::setSpeed(0);
 		}
 		osDelay(2);
 	}
 	else
 	{
-		if (pos < _enc - POS_TOLERANCE)
+		if (pos < _enc - POS_Y_TOLERANCE)
 		{
 			int32_t diff = _enc - pos;
 			if (diff > KEYA_MAX_SPEED)
@@ -327,7 +329,7 @@ uint8_t KeyaLKTechDriver::setPos(int32_t pos)
 			}
 			KeyaLKTechDriver::setSpeed(_speed);
 		}
-		else if (pos > _enc + POS_TOLERANCE)
+		else if (pos > _enc + POS_Y_TOLERANCE)
 		{
 			int32_t diff = pos - _enc;
 			if (diff > KEYA_MAX_SPEED)

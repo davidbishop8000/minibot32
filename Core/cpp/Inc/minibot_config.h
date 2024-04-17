@@ -43,11 +43,12 @@ extern "C"
 
 #define DRIVERS_QUANT 4
 
-#define POS_TOLERANCE 50
+#define POS_X_TOLERANCE 100
+#define POS_Y_TOLERANCE 100
 #define LK_MAX_SPEED 100000
-#define LK_MIN_SPEED 2000
+#define LK_MIN_SPEED 20000
 #define KEYA_MAX_SPEED 3000 //6000
-#define KEYA_MIN_SPEED 500
+#define KEYA_MIN_SPEED 100
 #define X_WHEEL_RATIO 1
 #define Y_WHEEL_RATIO 1
 
@@ -278,6 +279,7 @@ typedef struct
 	int32_t pos_servo2;
 	int32_t status;
 	int32_t msg_count;
+	int32_t cs_err;
 	SensorsTypeDef sens;
 	ErrorMsgTypeDef error;
 	uint8_t x_hold;

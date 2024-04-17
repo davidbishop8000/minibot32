@@ -23,6 +23,10 @@ KeyaLKTechDriver *mdrivers[DRIVERS_QUANT];
 
 void StartCanDriversTask(void *argument)
 {
+	mdrivers[0] = &driverX1;
+	mdrivers[1] = &driverX2;
+	mdrivers[2] = &driverY1;
+	mdrivers[3] = &driverY2;
 	driversInit();
 	uint32_t err_check_timer = 0;
 	enum MOVE_COMM command;
@@ -71,6 +75,12 @@ void StartCanDriversTask(void *argument)
 			{
 				driversStop();
 			}
+			if (command == MOVE_RESET)
+			{
+				driversStop();
+				driversInit();
+				globData.current_comm = MOVE_NONE;
+			}
 		}
 		else
 		{
@@ -113,11 +123,7 @@ void StartCanDriversTask(void *argument)
 
 void driversInit()
 {
-	mdrivers[0] = &driverX1;
-	mdrivers[1] = &driverX2;
-	mdrivers[2] = &driverY1;
-	mdrivers[3] = &driverY2;
-	osDelay(1000);
+	osDelay(5);
 	driverX1.resetError();
 	osDelay(5);
 	driverX2.resetError();
@@ -125,6 +131,8 @@ void driversInit()
 	driverX1.enable();
 	osDelay(5);
 	driverX2.enable();
+	osDelay(5);
+	driverY1.enable();
 	osDelay(5);
 }
 
@@ -135,5 +143,5 @@ void driversStop() {
 	driverX2.stop();
 	osDelay(2);
 	driverY1.stop();
-	osDelay(2);
+	osDelay(5);
 }
