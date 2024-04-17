@@ -17,8 +17,8 @@ extern ContrlMsgTypeDef contrlMsg;
 
 KeyaLKTechDriver driverX1(0x140 + DRIVER1_LKTECH_ID, globData);
 KeyaLKTechDriver driverX2(0x140 + DRIVER2_LKTECH_ID, globData);
-KeyaLKTechDriver driverY1(DRIVER_KEYA_ID + 0x600, 0x01, globData);
-KeyaLKTechDriver driverY2(DRIVER_KEYA_ID + 0x600, 0x02, globData);
+KeyaLKTechDriver driverY1(DRIVER_KEYA_ID + 0x06000000, 0x01, globData);
+KeyaLKTechDriver driverY2(DRIVER_KEYA_ID + 0x06000000, 0x02, globData);
 KeyaLKTechDriver *mdrivers[DRIVERS_QUANT];
 
 void StartCanDriversTask(void *argument)
@@ -31,6 +31,8 @@ void StartCanDriversTask(void *argument)
 		driverX1.readEnc();
 		osDelay(2);
 		driverX2.readEnc();
+		osDelay(2);
+		driverY1.readEnc();
 		osDelay(2);
 		driverY1.setEnc(globData.enc_idle);
 		command = (MOVE_COMM)globData.current_comm;

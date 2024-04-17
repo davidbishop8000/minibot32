@@ -24,13 +24,21 @@ void StartServoTask(void *argument)
 	enum MOVE_COMM command;
 	for (;;) {
 		command = (MOVE_COMM)globData.current_comm;
-		if (command == MOVE_SERVO) {
-			servo1.setAngle(contrlMsg.pos_servo);
-			servo2.setAngle(contrlMsg.pos_servo);
+		if (command == MOVE_SERVO1) {
+			servo1.setAngle(contrlMsg.pos_servo1);
+			//servo2.setAngle(contrlMsg.pos_servo1);
 			osDelay(800);
 			servo1.disable();
+			//servo2.disable();
+			globData.current_comm = MOVE_NONE;
+		}
+		else if (command == MOVE_SERVO2) {
+			//servo1.setAngle(contrlMsg.pos_servo1);
+			servo2.setAngle(contrlMsg.pos_servo2);
+			osDelay(800);
+			//servo1.disable();
 			servo2.disable();
-			globData.current_comm = 0;
+			globData.current_comm = MOVE_NONE;
 		}
 		osDelay(10);
 	}

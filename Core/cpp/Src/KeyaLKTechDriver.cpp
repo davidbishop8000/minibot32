@@ -156,11 +156,11 @@ uint32_t KeyaLKTechDriver::getId()
 uint8_t KeyaLKTechDriver::readEnc()
 {
 	if (_axis) {
-		_canData[0] = 0x23;
-		_canData[1] = 0x0C;
-		_canData[2] = 0x20;
+		_canData[0] = 0x40;
+		_canData[1] = 0x0F;
+		_canData[2] = 0x21;
 		_canData[3] = _axis;
-		_canData[4] = 0x00;
+		_canData[4] = 0x01;
 		_canData[5] = 0x00;
 		_canData[6] = 0x00;
 		_canData[7] = 0x00;
@@ -315,17 +315,36 @@ uint8_t KeyaLKTechDriver::setPos(int32_t pos)
 	{
 		if (pos < _enc - POS_TOLERANCE)
 		{
-			_speed = -LK_MAX_SPEED;
+			int32_t diff = _enc - pos;
+			if (diff > KEYA_MAX_SPEED)
+			{
+				_speed = -KEYA_MAX_SPEED;
+			}
+			else
+			{
+				_speed = -diff;
+				if (_speed > -KEYA_MIN_SPEED) _speed = -KEYA_MIN_SPEED;
+			}
 			KeyaLKTechDriver::setSpeed(_speed);
 		}
 		else if (pos > _enc + POS_TOLERANCE)
 		{
-			_speed = LK_MAX_SPEED;
+			int32_t diff = pos - _enc;
+			if (diff > KEYA_MAX_SPEED)
+			{
+				_speed = KEYA_MAX_SPEED;
+			}
+			else
+			{
+				_speed = diff;
+				if (_speed < KEYA_MIN_SPEED) _speed = KEYA_MIN_SPEED;
+			}
 			KeyaLKTechDriver::setSpeed(_speed);
 		}
 		else
 		{
-			KeyaLKTechDriver::stop();
+			//KeyaLKTechDriver::stop();
+			KeyaLKTechDriver::setSpeed(0);
 		}
 		osDelay(2);
 	}

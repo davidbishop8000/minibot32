@@ -67,12 +67,12 @@ uint8_t CanMsgRead(CanDataRecvTypeDef *canDataRecv) {
 	}
 	else
 	{
-		if (RxHeader.ExtId == 0x05800001) {
+		if (RxHeader.ExtId == 0x05800000 + DRIVER_KEYA_ID) {
+			mdrivers[2]->error_count = 0;
 			if (RxData[0] == 0x60)
 			{
 				mdrivers[2]->setTemp(RxData[6]);
 				mdrivers[3]->setTemp(RxData[7]);
-				mdrivers[2]->error_count = 0;
 			}
 			else if (RxData[1] == 0x0D) {
 				//globData.voltage = RxData[7];

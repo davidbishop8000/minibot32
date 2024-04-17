@@ -46,8 +46,8 @@ extern "C"
 #define POS_TOLERANCE 50
 #define LK_MAX_SPEED 100000
 #define LK_MIN_SPEED 2000
-#define KEYA_MAX_SPEED 6000
-#define KEYA_MIN_SPEED 1000
+#define KEYA_MAX_SPEED 3000 //6000
+#define KEYA_MIN_SPEED 500
 #define X_WHEEL_RATIO 1
 #define Y_WHEEL_RATIO 1
 
@@ -237,10 +237,11 @@ enum MOVE_COMM
 	MOVE_POS_X,		//left-right move
 	MOVE_POS_Y,		//back-forw move
 	MOVE_POS_FORK,	//fork move
-	MOVE_SERVO,
 	MOVE_LIFT,
-	MOVE_RESET,
+	MOVE_SERVO1,
+	MOVE_SERVO2,
 	MOVE_EMERGY_STOP,
+	MOVE_RESET,
 	MOVE_ERROR,
 	MOVE_MAX,
 };
@@ -254,8 +255,9 @@ typedef struct
 	int32_t pos_x;
 	int32_t pos_y;
 	int32_t pos_fork;
-	int32_t pos_servo;
 	int32_t pos_lift;
+	int32_t pos_servo1;
+	int32_t pos_servo2;
 	uint8_t x_hold;
 	uint8_t y_hold;
 	uint8_t r0;
@@ -271,8 +273,9 @@ typedef struct
 	int32_t pos_x;
 	int32_t pos_y;
 	int32_t pos_fork;
-	int32_t pos_servo;
 	int32_t pos_lift;
+	int32_t pos_servo1;
+	int32_t pos_servo2;
 	int32_t status;
 	int32_t msg_count;
 	SensorsTypeDef sens;
