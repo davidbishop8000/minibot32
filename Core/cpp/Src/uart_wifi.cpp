@@ -103,11 +103,13 @@ void StartUartWiFiTask(void *argument)
 			new_bms_data = 0;
 			bms_err = 0;
 			rcGetBattery();
+			globData.error.bms_err = 0;
 		}
 
 		if (HAL_GetTick() - bms_req_time > 1000) {
 			if (!bms_detected) {
-				HAL_UART_Transmit(&BMS_UART, (uint8_t*) bms_smart_request_msg, sizeof(bms_smart_request_msg), 100);
+				//HAL_UART_Transmit(&BMS_UART, (uint8_t*) bms_smart_request_msg, sizeof(bms_smart_request_msg), 100);
+				HAL_UART_Transmit(&BMS_UART, (uint8_t*) bms_jbd_request_msg0, sizeof(bms_jbd_request_msg0), 100);
 				bms_detected = 1;
 			}
 			else {
@@ -120,6 +122,7 @@ void StartUartWiFiTask(void *argument)
 				globData.capacity = 0;
 				bms_detected = 0;
 				batteryMsg.bms_type = BMS_NONE;
+				globData.error.bms_err = 1;
 			}
 		}
 	}

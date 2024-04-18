@@ -192,11 +192,11 @@ typedef struct {
 } SensorsTypeDef;
 
 typedef struct {
-	unsigned char driverX_err  :1;
-	unsigned char driverY_err  :1;
-	unsigned char driverF_err  :1;
-	unsigned char driverL_err  :1;
-	unsigned char err4  :1;
+	unsigned char driverX_err	:1;
+	unsigned char driverY_err	:1;
+	unsigned char driverF_err	:1;
+	unsigned char driverL_err	:1;
+	unsigned char bms_err		:1;
 	unsigned char err5  :1;
 	unsigned char err6  :1;
 	unsigned char err7  :1;

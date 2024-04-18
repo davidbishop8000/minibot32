@@ -40,45 +40,32 @@ void StartCanDriversTask(void *argument)
 		osDelay(2);
 		driverY1.setEnc(globData.enc_idle);
 		command = (MOVE_COMM)globData.current_comm;
-		if (command != MOVE_NONE)
+		if (command == MOVE_POS_X)
 		{
-			if (command == MOVE_POS_X)
+			driverX1.setPos(contrlMsg.pos_x);
+			if (driverX1.getSpeed() == 0)
 			{
-				driverX1.setPos(contrlMsg.pos_x);
-				if (driverX1.getSpeed() == 0)
-				{
-					driverX2.stop();
-					globData.current_comm = MOVE_NONE;
-				}
-				else
-				{
-					driverX2.setSpeed(-driverX1.getSpeed());
-				}
+				driverX2.stop();
+				globData.current_comm = MOVE_NONE;
 			}
-			else if (command == MOVE_POS_Y)
+			else
 			{
-				driverY1.setPos(contrlMsg.pos_y);
-				if (driverY1.getSpeed() == 0)
-				{
-					globData.current_comm = MOVE_NONE;
-				}
+				driverX2.setSpeed(-driverX1.getSpeed());
 			}
-			else if (command == MOVE_POS_FORK)
+		}
+		else if (command == MOVE_POS_Y)
+		{
+			driverY1.setPos(contrlMsg.pos_y);
+			if (driverY1.getSpeed() == 0)
 			{
-				driverY2.setPos(contrlMsg.pos_fork);
-				if (driverY2.getSpeed() == 0)
-				{
-					globData.current_comm = MOVE_NONE;
-				}
+				globData.current_comm = MOVE_NONE;
 			}
-			if (command == MOVE_EMERGY_STOP)
+		}
+		else if (command == MOVE_POS_FORK)
+		{
+			driverY2.setPos(contrlMsg.pos_fork);
+			if (driverY2.getSpeed() == 0)
 			{
-				driversStop();
-			}
-			if (command == MOVE_RESET)
-			{
-				driversStop();
-				driversInit();
 				globData.current_comm = MOVE_NONE;
 			}
 		}
@@ -100,15 +87,33 @@ void StartCanDriversTask(void *argument)
 			}
 			driversStop();
 		}
+		if (command == MOVE_EMERGY_STOP)
+		{
+			driversStop();
+		}
+		if (command == MOVE_RESET)
+		{
+			driversStop();
+			driversInit();
+			globData.current_comm = MOVE_NONE;
+		}
 		if (HAL_GetTick() - err_check_timer > 1000) {
 			driverX1.error_count++;
-			if (driverX1.error_count > 3) globData.error.driverX_err = 1;
-			else globData.error.driverX_err = 0;
+			if (driverX1.error_count > 3)
+			{
+				globData.error.driverX_err = 1;
+				driverY1.disable();
+			}
+			else
+			{
+				globData.error.driverX_err = 0;
+			}
 			driverY1.error_count++;
 			if (driverY1.error_count > 3)
 			{
 				globData.error.driverY_err = 1;
 				globData.error.driverF_err = 1;
+				driverY1.disable();
 			}
 			else
 			{
