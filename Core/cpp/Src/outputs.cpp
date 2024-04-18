@@ -32,35 +32,52 @@ void StartOutputsTask(void *argument)
 
 void SetOutputs()
 {
+	static uint8_t check_timer_en = 0;
 	if (globData.current_comm == MOVE_LIFT && !globData.error.driverL_err)
 	{
-		if (contrlMsg.pos_lift == 1 && globData.sens.limit_platform_up == 0)
+		if (contrlMsg.pos_lift == 1)
 		{
-			Y01_ON;
-			Y02_OFF;
-			lift_check_timer = HAL_GetTick();
+			if (globData.sens.limit_platform_up == 0)
+			{
+				Y01_ON;
+				Y02_OFF;
+				if (!check_timer_en)
+				{
+					lift_check_timer = HAL_GetTick();
+					check_timer_en = 1;
+				}
+			}
+			else
+			{
+				Y01_OFF;
+				globData.current_comm = MOVE_NONE;
+			}
 		}
-		else
+		else if (contrlMsg.pos_lift == 2)
 		{
-			Y01_OFF;
-			globData.current_comm = MOVE_NONE;
-		}
-		if (contrlMsg.pos_lift == 2 && globData.sens.limit_platform_down == 0)
-		{
-			Y01_OFF;
-			Y02_ON;
-			lift_check_timer = HAL_GetTick();
-		}
-		else
-		{
-			Y02_OFF;
-			globData.current_comm = MOVE_NONE;
+			if (globData.sens.limit_platform_down == 0)
+			{
+				Y01_OFF;
+				Y02_ON;
+				if (!check_timer_en)
+				{
+					lift_check_timer = HAL_GetTick();
+					check_timer_en = 1;
+				}
+			}
+			else
+			{
+				Y02_OFF;
+				globData.current_comm = MOVE_NONE;
+			}
 		}
 		if (HAL_GetTick() - lift_check_timer > 8000) {
 
 			globData.error.driverL_err = 1;
+			globData.current_comm = MOVE_NONE;
 			Y01_OFF;
 			Y02_OFF;
+			check_timer_en = 0;
 		}
 	}
 	else if (!*(uint16_t*)&globData.error) {
@@ -108,6 +125,14 @@ void SetOutputs()
 		}
 		Y19_OFF;
 		osDelay(500);
+	}
+	if (globData.sens.limit_platform_up){
+		Y01_OFF;
+		check_timer_en = 0;
+	}
+	else if (globData.sens.limit_platform_down){
+		Y02_OFF;
+		check_timer_en = 0;
 	}
 }
 

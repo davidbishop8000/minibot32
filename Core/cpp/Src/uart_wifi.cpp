@@ -88,6 +88,7 @@ void StartUartWiFiTask(void *argument)
 						}
 						checkData();
 						sendStatus();
+						globData.comm_count++;
 					}
 				}
 
@@ -139,6 +140,7 @@ void sendStatus()
 	statusMsg.sens = globData.sens;
 	statusMsg.error = globData.error;
 	statusMsg.cs_err = globData.cs_err;
+	statusMsg.comm_count = globData.comm_count;
 	statusMsg.msg_count++;
 	statusMsg.CS = calculateCS((uint8_t *)&statusMsg, sizeof(statusMsg)-1);
 	HAL_UART_Transmit(&WIFI_UART, (uint8_t*)&statusMsg, sizeof(statusMsg), 100);

@@ -221,6 +221,7 @@ typedef struct {
 	ErrorMsgTypeDef error;
 	uint32_t LKEncoder;
 	int32_t enc_idle;
+	uint32_t comm_count;
 	int8_t LKTemp;
 	uint8_t capacity;
 } GlobDataTypeDef;
@@ -280,6 +281,7 @@ typedef struct
 	int32_t status;
 	int32_t msg_count;
 	int32_t cs_err;
+	uint32_t comm_count;
 	SensorsTypeDef sens;
 	ErrorMsgTypeDef error;
 	uint8_t x_hold;
