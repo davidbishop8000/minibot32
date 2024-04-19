@@ -33,6 +33,11 @@ void StartInputsTask(void *argument)
 		IN_X10 ? (globData.sens.lim2 = 0) : (globData.sens.lim2 = 1);
 		IN_X11 ? (globData.sens.lim3 = 0) : (globData.sens.lim3 = 1);
 		IN_X12 ? (globData.sens.lim4 = 0) : (globData.sens.lim4 = 1);
+		IN_X13 ? (globData.sens.r0 = 0) : (globData.sens.r0 = 1);
+		IN_X14 ? (globData.sens.r1 = 0) : (globData.sens.r1 = 1);
+		IN_X15 ? (globData.sens.r2 = 0) : (globData.sens.r2 = 1);
+		IN_X16 ? (globData.sens.r3 = 0) : (globData.sens.r3 = 1);
+		IN_X17 ? (globData.sens.r4 = 0) : (globData.sens.r4 = 1);
 		osDelay(1);
 	}
 }

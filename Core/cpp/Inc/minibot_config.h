@@ -130,7 +130,7 @@ enum BMS_TYPE {
 
 typedef struct
 {
-	unsigned char ind : 1;
+	unsigned char b0 : 1;
 	unsigned char b1 : 1;
 	unsigned char b2 : 1;
 	unsigned char b3 : 1;
@@ -141,22 +141,13 @@ typedef struct
 } BitParasmsTypeDef;
 
 typedef struct {
-	float volume_per_rev;
-	uint32_t motor1_speed;
-	uint32_t motor1_acc;
-	uint32_t motor2_speed;
-	uint32_t motor2_acc;
-	uint32_t time_hold;
-	float volume;
-	float temp1;
-	float temp2;
-	float temp3;
-	float Kp;
-	float Ki;
-	float Kd;
+	uint32_t p0;
+	uint32_t p1;
+	uint32_t p2;
+	uint32_t p3;
 	BitParasmsTypeDef bitParams;
-	uint8_t reservU0;
-	uint8_t flash_init;
+	uint8_t u0;
+	uint8_t u1;
 	uint8_t CS;
 } MinibotConfigTypeDef;
 
@@ -165,7 +156,7 @@ typedef struct {
 	uint8_t start_msg1;
 	uint8_t control_id;
 	uint8_t msg_id;
-	MinibotConfigTypeDef termConfig;
+	MinibotConfigTypeDef botConfig;
 	uint8_t reservU0;
 	uint8_t reservU1;
 	uint8_t reservU2;
@@ -213,7 +204,6 @@ typedef struct {
 typedef struct {
 	uint8_t current_status;
 	uint8_t wifi_status;
-	uint8_t current_move_driver;
 	uint8_t current_comm;
 	uint8_t cs_err;
 	uint8_t LEDB;
@@ -222,7 +212,6 @@ typedef struct {
 	uint32_t LKEncoder;
 	int32_t enc_idle;
 	uint32_t comm_count;
-	int8_t LKTemp;
 	uint8_t capacity;
 } GlobDataTypeDef;
 
