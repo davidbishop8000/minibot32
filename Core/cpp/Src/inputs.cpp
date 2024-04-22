@@ -8,20 +8,26 @@
 #include "inputs.h"
 #include "minibot_config.h"
 
+extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim4;
 extern GlobDataTypeDef globData;
 extern MinibotConfigTypeDef minibotConfig;
-int32_t enc_prev = 0;
+extern int32_t encoderFork;
+int32_t enc_prev0 = 0;
+int32_t enc_prev1 = 0;
 
 void StartInputsTask(void *argument)
 {
 	for(;;)
 	{
-		static int32_t currCounter = 0;
-		currCounter = __HAL_TIM_GET_COUNTER(&htim4);
-		static int32_t enc_idle_tick = 0;
-		enc_idle_tick = unwrap_encoder(currCounter, &enc_prev);
-		globData.enc_idle = enc_idle_tick*Y_WHEEL_RATIO;
+		static int32_t currCounter0 = 0;
+		currCounter0 = __HAL_TIM_GET_COUNTER(&htim4);
+		static int32_t currCounter1 = 0;
+		currCounter1 = __HAL_TIM_GET_COUNTER(&htim2);
+		static int32_t enc_Y1 = 0;
+		enc_Y1 = unwrap_encoder(currCounter0, &enc_prev0);
+		globData.enc_Y1 = enc_Y1*Y_WHEEL_RATIO;
+		globData.enc_fork = unwrap_encoder(currCounter1, &enc_prev1);
 		IN_X02 ? (globData.sens.limit_sw1 = 0) : (globData.sens.limit_sw1 = 1);
 		IN_X03 ? (globData.sens.limit_sw2 = 0) : (globData.sens.limit_sw2 = 1);
 		IN_X04 ? (globData.sens.limit_platform_up = 0) : (globData.sens.limit_platform_up = 1);
@@ -44,15 +50,15 @@ void StartInputsTask(void *argument)
 
 int32_t unwrap_encoder(uint16_t in, int32_t *prev)
 {
-    int32_t c32 = (int32_t)in - ENC_HALF_PERIOD;
+    int32_t c32 = (int32_t)in - ENC0_HALF_PERIOD;
     int32_t dif = (c32-*prev);
 
-    int32_t mod_dif = ((dif + ENC_HALF_PERIOD) % ENC_ONE_PERIOD) - ENC_HALF_PERIOD;
-    if(dif < -ENC_HALF_PERIOD) {
-        mod_dif += ENC_ONE_PERIOD;
+    int32_t mod_dif = ((dif + ENC0_HALF_PERIOD) % ENC0_ONE_PERIOD) - ENC0_HALF_PERIOD;
+    if(dif < -ENC0_HALF_PERIOD) {
+        mod_dif += ENC0_ONE_PERIOD;
     }
     int32_t unwrapped = *prev + mod_dif;
     *prev = unwrapped;
 
-    return unwrapped + ENC_HALF_PERIOD;
+    return unwrapped + ENC0_HALF_PERIOD;
 }

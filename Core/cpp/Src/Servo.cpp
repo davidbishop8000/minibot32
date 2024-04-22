@@ -37,9 +37,7 @@ uint8_t Servo::setAngleHold(int32_t angle)
 		return 1;
 	}
 	return 0;
-
 }
-
 uint32_t Servo::getAngle()
 {
 	return _angle;
@@ -56,7 +54,6 @@ uint8_t Servo::disable()
 	HAL_TIM_PWM_Stop(_htim, _timChannel);
 	return 1;
 }
-
 int Servo::map(int x, int in_min, int in_max, int out_min, int out_max)
 {
 	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;

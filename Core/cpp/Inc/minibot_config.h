@@ -210,7 +210,8 @@ typedef struct {
 	SensorsTypeDef sens;
 	ErrorMsgTypeDef error;
 	uint32_t LKEncoder;
-	int32_t enc_idle;
+	int32_t enc_Y1;
+	int32_t enc_fork;
 	uint32_t comm_count;
 	uint8_t capacity;
 } GlobDataTypeDef;

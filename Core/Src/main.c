@@ -105,6 +105,7 @@ int main(void)
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
+  MX_TIM2_Init();
   MX_TIM3_Init();
   MX_TIM4_Init();
   MX_IWDG_Init();
@@ -119,7 +120,8 @@ int main(void)
   __HAL_DMA_DISABLE_IT(&BMS_UART_DMA, DMA_IT_HT);
   __HAL_DMA_DISABLE_IT(&RC_UART_DMA, DMA_IT_HT);
 
-  HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_ALL);
+  HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_1);
+  HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_1);
   HAL_IWDG_Refresh(&hiwdg);
   /* USER CODE END 2 */
 

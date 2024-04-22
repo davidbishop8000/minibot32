@@ -18,7 +18,7 @@ extern ContrlMsgTypeDef contrlMsg;
 KeyaLKTechDriver driverX1(0x140 + DRIVER1_LKTECH_ID, globData);
 KeyaLKTechDriver driverX2(0x140 + DRIVER2_LKTECH_ID, globData);
 KeyaLKTechDriver driverY1(DRIVER_KEYA_ID + 0x06000000, 0x01, globData);
-KeyaLKTechDriver driverY2(DRIVER_KEYA_ID + 0x06000000, 0x02, globData);
+KeyaLKTechDriver driverFork(DRIVER_KEYA_ID + 0x06000000, 0x02, globData);
 KeyaLKTechDriver *mdrivers[DRIVERS_QUANT];
 
 void StartCanDriversTask(void *argument)
@@ -26,7 +26,7 @@ void StartCanDriversTask(void *argument)
 	mdrivers[0] = &driverX1;
 	mdrivers[1] = &driverX2;
 	mdrivers[2] = &driverY1;
-	mdrivers[3] = &driverY2;
+	mdrivers[3] = &driverFork;
 	driversInit();
 	uint32_t err_check_timer = 0;
 	enum MOVE_COMM command;
@@ -38,7 +38,8 @@ void StartCanDriversTask(void *argument)
 		osDelay(2);
 		driverY1.readEnc();
 		osDelay(2);
-		driverY1.setEnc(globData.enc_idle);
+		driverY1.setEnc(globData.enc_Y1);
+		driverFork.setEnc(globData.enc_fork);
 		command = (MOVE_COMM)globData.current_comm;
 		if (command == MOVE_POS_X)
 		{
@@ -63,8 +64,8 @@ void StartCanDriversTask(void *argument)
 		}
 		else if (command == MOVE_POS_FORK)
 		{
-			driverY2.setPos(contrlMsg.pos_fork);
-			if (driverY2.getSpeed() == 0)
+			driverFork.setPos(contrlMsg.pos_fork);
+			if (driverFork.getSpeed() == 0)
 			{
 				globData.current_comm = MOVE_NONE;
 			}

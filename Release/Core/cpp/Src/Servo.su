@@ -1,7 +1,7 @@
 ../Core/cpp/Src/Servo.cpp:10:1:Servo::Servo(TIM_HandleTypeDef*, uint32_t)	24	static
 ../Core/cpp/Src/Servo.cpp:15:9:uint8_t Servo::setAngle(int32_t)	32	static
 ../Core/cpp/Src/Servo.cpp:30:9:uint8_t Servo::setAngleHold(int32_t)	24	static
-../Core/cpp/Src/Servo.cpp:43:10:uint32_t Servo::getAngle()	16	static
-../Core/cpp/Src/Servo.cpp:47:9:uint8_t Servo::enable()	16	static
-../Core/cpp/Src/Servo.cpp:53:9:uint8_t Servo::disable()	16	static
-../Core/cpp/Src/Servo.cpp:60:5:int Servo::map(int, int, int, int, int)	24	static
+../Core/cpp/Src/Servo.cpp:41:10:uint32_t Servo::getAngle()	16	static
+../Core/cpp/Src/Servo.cpp:45:9:uint8_t Servo::enable()	16	static
+../Core/cpp/Src/Servo.cpp:51:9:uint8_t Servo::disable()	16	static
+../Core/cpp/Src/Servo.cpp:57:5:int Servo::map(int, int, int, int, int)	24	static
