@@ -25,6 +25,7 @@ public:
 
 	uint8_t setAngle(int32_t angle);
 	uint32_t getAngle();
+	uint32_t getStatus();
 	uint8_t enable();
 	uint8_t disable();
 	uint8_t setAngleHold(int32_t angle);
@@ -37,6 +38,7 @@ private:
 	uint32_t _timChannel;
 	uint32_t _angle;
 	uint32_t _enabled;
+	uint32_t _pos;
 };
 
 #endif /* CPP_INC_SERVO_H_ */

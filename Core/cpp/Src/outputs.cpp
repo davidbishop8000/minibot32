@@ -9,8 +9,6 @@
 #include "outputs.h"
 #include "minibot_config.h"
 
-
-extern IWDG_HandleTypeDef hiwdg;
 extern GlobDataTypeDef globData;
 extern MinibotConfigTypeDef minibotConfig;
 extern ContrlMsgTypeDef contrlMsg;
@@ -23,7 +21,6 @@ void StartOutputsTask(void *argument)
 {
 	for(;;)
 	{
-		HAL_IWDG_Refresh(&hiwdg);
 		SetOutputs();
 		if (globData.LEDB) LedBlink();
 		osDelay(5);

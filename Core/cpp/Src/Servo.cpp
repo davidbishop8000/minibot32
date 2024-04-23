@@ -22,6 +22,14 @@ uint8_t Servo::setAngle(int32_t angle)
 //	else if (_timChannel == TIM_CHANNEL_4) _htim->CCR4 = angl;
 	__HAL_TIM_SET_COMPARE(_htim, _timChannel, angl);
 	_angle = angle;
+	if (_angle == 0)
+	{
+		_pos = SERVO_OPEN;
+	}
+	else
+	{
+		_pos = SERVO_CLOSE;
+	}
 	//osDelay(800);
 	//HAL_TIM_PWM_Stop(_htim, _timChannel);
 	return 1;
@@ -41,6 +49,10 @@ uint8_t Servo::setAngleHold(int32_t angle)
 uint32_t Servo::getAngle()
 {
 	return _angle;
+}
+uint32_t Servo::getStatus()
+{
+	return _pos;
 }
 uint8_t Servo::enable()
 {

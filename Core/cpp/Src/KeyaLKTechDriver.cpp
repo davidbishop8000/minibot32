@@ -315,31 +315,46 @@ uint8_t KeyaLKTechDriver::setPos(int32_t pos)
 	}
 	else
 	{
-		if (pos < _enc - POS_Y_TOLERANCE)
+		int32_t toler;
+		int32_t max_sp;
+		int32_t min_sp;
+		if (_axis == 0x01)
+		{
+			toler = POS_Y_TOLERANCE;
+			max_sp = KEYA_MAX_SPEED;
+			min_sp = KEYA_MIN_SPEED;
+		}
+		else
+		{
+			toler = POS_FORK_TOLERANCE;
+			max_sp = FORK_MAX_SPEED;
+			min_sp = FORK_MIN_SPEED;
+		}
+		if (pos < _enc - toler)
 		{
 			int32_t diff = _enc - pos;
-			if (diff > KEYA_MAX_SPEED)
+			if (diff > max_sp)
 			{
-				_speed = -KEYA_MAX_SPEED;
+				_speed = -max_sp;
 			}
 			else
 			{
 				_speed = -diff;
-				if (_speed > -KEYA_MIN_SPEED) _speed = -KEYA_MIN_SPEED;
+				if (_speed > -min_sp) _speed = -min_sp;
 			}
 			KeyaLKTechDriver::setSpeed(_speed);
 		}
-		else if (pos > _enc + POS_Y_TOLERANCE)
+		else if (pos > _enc + toler)
 		{
 			int32_t diff = pos - _enc;
-			if (diff > KEYA_MAX_SPEED)
+			if (diff > max_sp)
 			{
-				_speed = KEYA_MAX_SPEED;
+				_speed = max_sp;
 			}
 			else
 			{
 				_speed = diff;
-				if (_speed < KEYA_MIN_SPEED) _speed = KEYA_MIN_SPEED;
+				if (_speed < min_sp) _speed = min_sp;
 			}
 			KeyaLKTechDriver::setSpeed(_speed);
 		}

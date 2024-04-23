@@ -81,14 +81,14 @@ void StartUartWiFiTask(void *argument)
 					}
 					else
 					{
-						if (globData.current_comm == MOVE_NONE || wifi_uart_buff[3] == MOVE_EMERGY_STOP || wifi_uart_buff[3] == MOVE_RESET)
+						if ((globData.current_comm == MOVE_NONE || wifi_uart_buff[3] == MOVE_EMERGY_STOP || wifi_uart_buff[3] == MOVE_RESET) && wifi_uart_buff[3] < MOVE_MAX)
 						{
 							memcpy(&contrlMsg, wifi_uart_buff, sizeof(ContrlMsgTypeDef));
 							globData.current_comm = contrlMsg.comm;
 						}
+						globData.comm_count++;
 						checkData();
 						sendStatus();
-						globData.comm_count++;
 					}
 				}
 
@@ -137,8 +137,7 @@ void sendStatus()
 	statusMsg.pos_x = mdrivers[0]->getPos();
 	statusMsg.pos_y = mdrivers[2]->getPos();
 	statusMsg.pos_fork = mdrivers[3]->getPos();
-	statusMsg.pos_servo1 = servo[0]->getAngle();
-	statusMsg.pos_servo2 = servo[1]->getAngle();
+	statusMsg.pos_servo = servo[0]->getStatus();
 	statusMsg.capacity = globData.capacity;
 	statusMsg.sens = globData.sens;
 	statusMsg.error = globData.error;
@@ -155,6 +154,8 @@ void checkData()
 	{
 		*(uint16_t*)&globData.error = 0;
 		globData.current_comm = MOVE_RESET;
+		globData.comm_count = 0;
+		globData.cs_err = 0;
 	}
 }
 

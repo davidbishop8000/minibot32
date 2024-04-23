@@ -45,10 +45,13 @@ extern "C"
 
 #define POS_X_TOLERANCE 100
 #define POS_Y_TOLERANCE 100
+#define POS_FORK_TOLERANCE 50
 #define LK_MAX_SPEED 100000
 #define LK_MIN_SPEED 20000
 #define KEYA_MAX_SPEED 3000 //6000
-#define KEYA_MIN_SPEED 100
+#define KEYA_MIN_SPEED 500
+#define FORK_MAX_SPEED 3000 //6000
+#define FORK_MIN_SPEED 1500
 #define X_WHEEL_RATIO 1
 #define Y_WHEEL_RATIO 1
 
@@ -230,12 +233,18 @@ enum MOVE_COMM
 	MOVE_POS_Y,		//back-forw move
 	MOVE_POS_FORK,	//fork move
 	MOVE_LIFT,
-	MOVE_SERVO1,
-	MOVE_SERVO2,
+	MOVE_SERVO,
 	MOVE_EMERGY_STOP,
 	MOVE_RESET,
 	MOVE_ERROR,
 	MOVE_MAX,
+};
+
+enum SERVO_POS {
+	SERVO_NONE = 0,
+	SERVO_OPEN,
+	SERVO_CLOSE,
+	SERVO_MAX,
 };
 
 typedef struct
@@ -248,8 +257,7 @@ typedef struct
 	int32_t pos_y;
 	int32_t pos_fork;
 	int32_t pos_lift;
-	int32_t pos_servo1;
-	int32_t pos_servo2;
+	int32_t pos_servo;
 	uint8_t x_hold;
 	uint8_t y_hold;
 	uint8_t r0;
@@ -266,8 +274,7 @@ typedef struct
 	int32_t pos_y;
 	int32_t pos_fork;
 	int32_t pos_lift;
-	int32_t pos_servo1;
-	int32_t pos_servo2;
+	int32_t pos_servo;
 	int32_t status;
 	int32_t msg_count;
 	int32_t cs_err;
@@ -291,16 +298,6 @@ enum LED_BLINK {
 	LEDB_FLASH_OK,
 	LEDB_ERROR,
 	LEDB_MAX,
-};
-
-enum SERVO_COMM {
-	SERVO_ZERO = 0,
-	SERVO_FORW_OPEN,
-	SERVO_FORW_CLOSE,
-	SERVO_BACK_OPEN,
-	SERVO_BACK_CLOSE,
-	SERVO_ERROR,
-	SERVO_MAX,
 };
 
 enum BEEPER {

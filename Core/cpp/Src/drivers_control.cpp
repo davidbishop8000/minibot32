@@ -11,6 +11,7 @@
 #include "canbus.h"
 #include "InitCanDrivers.h"
 
+extern IWDG_HandleTypeDef hiwdg;
 extern GlobDataTypeDef globData;
 extern MinibotConfigTypeDef minibotConfig;
 extern ContrlMsgTypeDef contrlMsg;
@@ -32,6 +33,7 @@ void StartCanDriversTask(void *argument)
 	enum MOVE_COMM command;
 	for(;;)
 	{
+		HAL_IWDG_Refresh(&hiwdg);
 		driverX1.readEnc();
 		osDelay(2);
 		driverX2.readEnc();
