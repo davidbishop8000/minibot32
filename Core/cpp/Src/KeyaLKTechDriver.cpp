@@ -372,6 +372,11 @@ void KeyaLKTechDriver::setEnc(int32_t enc)
 {
 	if (!_canTxHeader.ExtId)
 	{
+		if (_globData.sens.limit_sw1)
+		{
+			_enc_offset = enc;
+			_prevEnc = 0;
+		}
 		_enc = KeyaLKTechDriver::UnwrapEncoder(enc, &_prevEnc) - _enc_offset;
 	}
 	else _enc = enc;

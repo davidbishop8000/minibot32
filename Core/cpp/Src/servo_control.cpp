@@ -24,21 +24,21 @@ void StartServoTask(void *argument)
 	enum MOVE_COMM command;
 	for (;;) {
 		command = (MOVE_COMM)globData.current_comm;
-		if (command == MOVE_SERVO) {
+		if (command == MOVE_SERVO || command == MOVE_ACTION) {
 			if ((SERVO_POS)contrlMsg.pos_servo == SERVO_OPEN)
 			{
 				servo1.setAngle(0);
-				servo2.setAngle(180);
+				servo2.setAngle(SERVO_ANGLE_CLOSE);
 			}
 			else if ((SERVO_POS)contrlMsg.pos_servo == SERVO_CLOSE)
 			{
-				servo1.setAngle(180);
+				servo1.setAngle(SERVO_ANGLE_CLOSE);
 				servo2.setAngle(0);
 			}
 			osDelay(800);
 			servo1.disable();
 			servo2.disable();
-			globData.current_comm = MOVE_NONE;
+			if (command != MOVE_ACTION) globData.current_comm = MOVE_NONE;
 		}
 		osDelay(10);
 	}

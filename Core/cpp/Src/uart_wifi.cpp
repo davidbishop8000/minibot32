@@ -138,6 +138,7 @@ void sendStatus()
 	statusMsg.pos_y = mdrivers[2]->getPos();
 	statusMsg.pos_fork = mdrivers[3]->getPos();
 	statusMsg.pos_servo = servo[0]->getStatus();
+	statusMsg.action_comm = globData.action_comm;
 	statusMsg.capacity = globData.capacity;
 	statusMsg.sens = globData.sens;
 	statusMsg.error = globData.error;
@@ -156,6 +157,13 @@ void checkData()
 		globData.current_comm = MOVE_RESET;
 		globData.comm_count = 0;
 		globData.cs_err = 0;
+	}
+	else if (contrlMsg.comm == MOVE_ACTION)
+	{
+		globData.action_comm = contrlMsg.action_comm;
+		contrlMsg.comm = 0;
+		contrlMsg.action_comm = 0;
+		contrlMsg.pos_servo = 0;
 	}
 }
 

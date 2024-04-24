@@ -55,6 +55,8 @@ extern "C"
 #define X_WHEEL_RATIO 1
 #define Y_WHEEL_RATIO 1
 
+#define SERVO_ANGLE_CLOSE 90
+
 #define FLASH_INIT 0x44
 
 ////////Control//////////
@@ -173,11 +175,11 @@ typedef struct {
 	unsigned char limit_platform_down	:1;
 	unsigned char limit_servo_open		:1;
 	unsigned char limit_servo_close		:1;
-	unsigned char lim0					:1;
-	unsigned char lim1					:1;
+	unsigned char limit_fork_center		:1;
+	unsigned char sw_box				:1;
 	unsigned char lim2					:1;
-	unsigned char lim3					:1;
-	unsigned char lim4					:1;
+	unsigned char lim1					:1;
+	unsigned char lim0					:1;
 	unsigned char r0					:1;
 	unsigned char r1					:1;
 	unsigned char r2					:1;
@@ -208,6 +210,7 @@ typedef struct {
 	uint8_t current_status;
 	uint8_t wifi_status;
 	uint8_t current_comm;
+	uint8_t action_comm;
 	uint8_t cs_err;
 	uint8_t LEDB;
 	SensorsTypeDef sens;
@@ -236,8 +239,20 @@ enum MOVE_COMM
 	MOVE_SERVO,
 	MOVE_EMERGY_STOP,
 	MOVE_RESET,
+	MOVE_ACTION,
 	MOVE_ERROR,
 	MOVE_MAX,
+};
+
+enum ACTION_COMM
+ {
+	ACTION_NONE = 0,
+	ACTION_GET_BOX_L,
+	ACTION_GET_BOX_R,
+	ACTION_PUT_BOX_L,
+	ACTION_PUT_BOX_R,
+	ACTION_ERROR,
+	ACTION_MAX,
 };
 
 enum SERVO_POS {
@@ -258,8 +273,12 @@ typedef struct
 	int32_t pos_fork;
 	int32_t pos_lift;
 	int32_t pos_servo;
+	uint8_t action_comm;
 	uint8_t x_hold;
 	uint8_t y_hold;
+	uint8_t r3;
+	uint8_t r2;
+	uint8_t r1;
 	uint8_t r0;
 	uint8_t CS;
 } ContrlMsgTypeDef;
@@ -281,10 +300,10 @@ typedef struct
 	uint32_t comm_count;
 	SensorsTypeDef sens;
 	ErrorMsgTypeDef error;
+	uint8_t action_comm;
 	uint8_t x_hold;
 	uint8_t y_hold;
 	uint8_t capacity;
-	uint8_t r3;
 	uint8_t r2;
 	uint8_t r1;
 	uint8_t r0;

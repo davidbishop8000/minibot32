@@ -24,11 +24,11 @@ uint8_t Servo::setAngle(int32_t angle)
 	_angle = angle;
 	if (_angle == 0)
 	{
-		_pos = SERVO_OPEN;
+		_set_pos = SERVO_OPEN;
 	}
 	else
 	{
-		_pos = SERVO_CLOSE;
+		_set_pos = SERVO_CLOSE;
 	}
 	//osDelay(800);
 	//HAL_TIM_PWM_Stop(_htim, _timChannel);
@@ -52,7 +52,7 @@ uint32_t Servo::getAngle()
 }
 uint32_t Servo::getStatus()
 {
-	return _pos;
+	return _curr_pos;
 }
 uint8_t Servo::enable()
 {
@@ -64,6 +64,7 @@ uint8_t Servo::disable()
 {
 	_enabled = 0;
 	HAL_TIM_PWM_Stop(_htim, _timChannel);
+	_curr_pos = _set_pos;
 	return 1;
 }
 int Servo::map(int x, int in_min, int in_max, int out_min, int out_max)

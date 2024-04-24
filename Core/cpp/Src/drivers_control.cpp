@@ -15,12 +15,14 @@ extern IWDG_HandleTypeDef hiwdg;
 extern GlobDataTypeDef globData;
 extern MinibotConfigTypeDef minibotConfig;
 extern ContrlMsgTypeDef contrlMsg;
+extern Servo *servo[2];
 
 KeyaLKTechDriver driverX1(0x140 + DRIVER1_LKTECH_ID, globData);
 KeyaLKTechDriver driverX2(0x140 + DRIVER2_LKTECH_ID, globData);
 KeyaLKTechDriver driverY1(DRIVER_KEYA_ID + 0x06000000, 0x01, globData);
 KeyaLKTechDriver driverFork(DRIVER_KEYA_ID + 0x06000000, 0x02, globData);
 KeyaLKTechDriver *mdrivers[DRIVERS_QUANT];
+int32_t act_state = 0;
 
 void StartCanDriversTask(void *argument)
 {
@@ -72,6 +74,65 @@ void StartCanDriversTask(void *argument)
 				globData.current_comm = MOVE_NONE;
 			}
 		}
+		else if (command == MOVE_ACTION)
+		{
+			if (act_state == 0)
+			{
+				if (servo[0]->getStatus() != SERVO_OPEN && (globData.action_comm == ACTION_GET_BOX_L || globData.action_comm == ACTION_GET_BOX_R))
+				{
+					contrlMsg.pos_servo = SERVO_OPEN;
+				}
+				else if (servo[0]->getStatus() != SERVO_CLOSE && (globData.action_comm == ACTION_PUT_BOX_L || globData.action_comm == ACTION_PUT_BOX_R))
+				{
+					contrlMsg.pos_servo = SERVO_CLOSE;
+				}
+				else
+				{
+					act_state++;
+				}
+			}
+			else if (act_state == 1)
+			{
+				if (globData.action_comm == ACTION_GET_BOX_L || globData.action_comm == ACTION_PUT_BOX_L)
+				{
+					driverX1.setPos(100000);
+				}
+				if (globData.action_comm == ACTION_GET_BOX_R || globData.action_comm == ACTION_PUT_BOX_R)
+				{
+					driverX1.setPos(-100000);
+				}
+				if (driverX1.getSpeed() == 0)
+				{
+					act_state++;
+				}
+			}
+			else if (act_state == 2)
+			{
+				if (servo[0]->getStatus() != SERVO_CLOSE && (globData.action_comm == ACTION_GET_BOX_L || globData.action_comm == ACTION_GET_BOX_R))
+				{
+					contrlMsg.pos_servo = SERVO_CLOSE;
+				}
+				else if (servo[0]->getStatus() != SERVO_OPEN && (globData.action_comm == ACTION_PUT_BOX_L || globData.action_comm == ACTION_PUT_BOX_R))
+				{
+					contrlMsg.pos_servo = SERVO_OPEN;
+				}
+				else
+				{
+					act_state++;
+					contrlMsg.pos_servo = SERVO_NONE;
+				}
+			}
+			else if (act_state == 3)
+			{
+				driverX1.setPos(0);
+				if (driverX1.getSpeed() == 0)
+				{
+					act_state = 0;
+					globData.current_comm = MOVE_NONE;
+					globData.action_comm = ACTION_NONE;
+				}
+			}
+		}
 		else
 		{
 			driverX1.readError();
@@ -99,6 +160,8 @@ void StartCanDriversTask(void *argument)
 			driversStop();
 			driversInit();
 			globData.current_comm = MOVE_NONE;
+			globData.action_comm = ACTION_NONE;
+			act_state = 0;
 		}
 		if (HAL_GetTick() - err_check_timer > 1000) {
 			driverX1.error_count++;

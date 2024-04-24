@@ -12,7 +12,6 @@ extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim4;
 extern GlobDataTypeDef globData;
 extern MinibotConfigTypeDef minibotConfig;
-extern int32_t encoderFork;
 int32_t enc_prev0 = 0;
 int32_t enc_prev1 = 0;
 
@@ -21,8 +20,8 @@ void StartInputsTask(void *argument)
 	for(;;)
 	{
 		static int32_t currCounter0 = 0;
-		currCounter0 = __HAL_TIM_GET_COUNTER(&htim4);
 		static int32_t currCounter1 = 0;
+		currCounter0 = __HAL_TIM_GET_COUNTER(&htim4);
 		currCounter1 = __HAL_TIM_GET_COUNTER(&htim2);
 		static int32_t enc_Y1 = 0;
 		enc_Y1 = unwrap_encoder(currCounter0, &enc_prev0);
@@ -34,16 +33,25 @@ void StartInputsTask(void *argument)
 		IN_X05 ? (globData.sens.limit_platform_down = 0) : (globData.sens.limit_platform_down= 1);
 		IN_X06 ? (globData.sens.limit_servo_open= 0) : (globData.sens.limit_servo_open = 1);
 		IN_X07 ? (globData.sens.limit_servo_close = 0) : (globData.sens.limit_servo_close = 1);
-		IN_X08 ? (globData.sens.lim0 = 0) : (globData.sens.lim0 = 1);
-		IN_X09 ? (globData.sens.lim1 = 0) : (globData.sens.lim1 = 1);
-		IN_X10 ? (globData.sens.lim2 = 0) : (globData.sens.lim2 = 1);
-		IN_X11 ? (globData.sens.lim3 = 0) : (globData.sens.lim3 = 1);
-		IN_X12 ? (globData.sens.lim4 = 0) : (globData.sens.lim4 = 1);
+		IN_X08 ? (globData.sens.limit_fork_center = 0) : (globData.sens.limit_fork_center = 1);
+		IN_X09 ? (globData.sens.lim2 = 0) : (globData.sens.lim2 = 1);
+		IN_X10 ? (globData.sens.lim1 = 0) : (globData.sens.lim1 = 1);
+		IN_X12 ? (globData.sens.lim0 = 0) : (globData.sens.lim0 = 1);
 		IN_X13 ? (globData.sens.r0 = 0) : (globData.sens.r0 = 1);
 		IN_X14 ? (globData.sens.r1 = 0) : (globData.sens.r1 = 1);
 		IN_X15 ? (globData.sens.r2 = 0) : (globData.sens.r2 = 1);
 		IN_X16 ? (globData.sens.r3 = 0) : (globData.sens.r3 = 1);
 		IN_X17 ? (globData.sens.r4 = 0) : (globData.sens.r4 = 1);
+		if (globData.sens.limit_sw2)
+		{
+			__HAL_TIM_SET_COUNTER(&htim4, 0);
+			enc_prev0 = 0;
+		}
+		if (globData.sens.limit_fork_center)
+		{
+			__HAL_TIM_SET_COUNTER(&htim2, 0);
+			enc_prev1 = 0;
+		}
 		osDelay(1);
 	}
 }

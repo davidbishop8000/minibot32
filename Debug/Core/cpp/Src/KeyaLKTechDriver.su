@@ -21,5 +21,5 @@
 ../Core/cpp/Src/KeyaLKTechDriver.cpp:269:6:void KeyaLKTechDriver::setOffset()	16	static
 ../Core/cpp/Src/KeyaLKTechDriver.cpp:274:9:uint8_t KeyaLKTechDriver::setPos(int32_t)	48	static
 ../Core/cpp/Src/KeyaLKTechDriver.cpp:371:6:void KeyaLKTechDriver::setEnc(int32_t)	16	static
-../Core/cpp/Src/KeyaLKTechDriver.cpp:380:9:int32_t KeyaLKTechDriver::UnwrapEncoder(uint16_t, int32_t*)	40	static
-../Core/cpp/Src/KeyaLKTechDriver.cpp:395:9:uint8_t KeyaLKTechDriver::sendData()	16	static
+../Core/cpp/Src/KeyaLKTechDriver.cpp:385:9:int32_t KeyaLKTechDriver::UnwrapEncoder(uint16_t, int32_t*)	40	static
+../Core/cpp/Src/KeyaLKTechDriver.cpp:400:9:uint8_t KeyaLKTechDriver::sendData()	16	static

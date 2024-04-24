@@ -38,7 +38,8 @@ private:
 	uint32_t _timChannel;
 	uint32_t _angle;
 	uint32_t _enabled;
-	uint32_t _pos;
+	uint32_t _set_pos;
+	uint32_t _curr_pos;
 };
 
 #endif /* CPP_INC_SERVO_H_ */
