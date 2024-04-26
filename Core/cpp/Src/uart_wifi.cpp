@@ -137,6 +137,7 @@ void sendStatus()
 	statusMsg.pos_x = mdrivers[0]->getPos();
 	statusMsg.pos_y = mdrivers[2]->getPos();
 	statusMsg.pos_fork = mdrivers[3]->getPos();
+	statusMsg.pos_lift = globData.lift_status;
 	statusMsg.pos_servo = servo[0]->getStatus();
 	statusMsg.action_comm = globData.action_comm;
 	statusMsg.capacity = globData.capacity;

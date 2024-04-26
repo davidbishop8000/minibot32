@@ -218,6 +218,7 @@ typedef struct {
 	uint32_t LKEncoder;
 	int32_t enc_Y1;
 	int32_t enc_fork;
+	int32_t lift_status;
 	uint32_t comm_count;
 	uint8_t capacity;
 } GlobDataTypeDef;
@@ -253,6 +254,13 @@ enum ACTION_COMM
 	ACTION_PUT_BOX_R,
 	ACTION_ERROR,
 	ACTION_MAX,
+};
+
+enum LIFT_POS {
+	LIFT_NONE = 0,
+	LIFT_UP,
+	LIFT_DOWN,
+	LIFT_MAX,
 };
 
 enum SERVO_POS {

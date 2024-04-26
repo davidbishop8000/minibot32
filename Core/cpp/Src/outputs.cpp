@@ -16,6 +16,10 @@ extern ContrlMsgTypeDef contrlMsg;
 //extern IWDG_HandleTypeDef hiwdg;
 
 uint32_t lift_check_timer = 0;
+uint32_t curr_lift_move = 0;
+
+uint32_t blink_timer = 0;
+uint32_t blink_interval = 300;
 
 void StartOutputsTask(void *argument)
 {
@@ -32,40 +36,32 @@ void SetOutputs()
 	static uint8_t check_timer_en = 0;
 	if (globData.current_comm == MOVE_LIFT && !globData.error.driverL_err)
 	{
-		if (contrlMsg.pos_lift == 1)
+		if (contrlMsg.pos_lift == LIFT_UP)
 		{
 			if (globData.sens.limit_platform_up == 0)
 			{
 				Y01_ON;
 				Y02_OFF;
+				curr_lift_move = LIFT_UP;
 				if (!check_timer_en)
 				{
 					lift_check_timer = HAL_GetTick();
 					check_timer_en = 1;
 				}
 			}
-			else
-			{
-				Y01_OFF;
-				globData.current_comm = MOVE_NONE;
-			}
 		}
-		else if (contrlMsg.pos_lift == 2)
+		else if (contrlMsg.pos_lift == LIFT_DOWN)
 		{
 			if (globData.sens.limit_platform_down == 0)
 			{
-				Y01_OFF;
+				Y01_ON;
 				Y02_ON;
+				curr_lift_move = LIFT_DOWN;
 				if (!check_timer_en)
 				{
 					lift_check_timer = HAL_GetTick();
 					check_timer_en = 1;
 				}
-			}
-			else
-			{
-				Y02_OFF;
-				globData.current_comm = MOVE_NONE;
 			}
 		}
 		if (HAL_GetTick() - lift_check_timer > 8000) {
@@ -74,32 +70,16 @@ void SetOutputs()
 			globData.current_comm = MOVE_NONE;
 			Y01_OFF;
 			Y02_OFF;
+			curr_lift_move = LIFT_NONE;
 			check_timer_en = 0;
 		}
-	}
-	else if (!*(uint16_t*)&globData.error) {
-		Y01_OFF;
-		Y02_OFF;
-
-		Y21_ON;
-		osDelay(100);
-		Y22_ON;
-		osDelay(20);
-		Y21_OFF;
-		osDelay(100);
-		Y23_ON;
-		osDelay(20);
-		Y22_OFF;
-		osDelay(100);
-		Y23_OFF;
-		osDelay(300);
 	}
 	else
 	{
 		Y01_OFF;
 		Y02_OFF;
-
-		Y16_ON;
+		check_timer_en = 0;
+		/*Y16_ON;
 		osDelay(100);
 		Y17_ON;
 		osDelay(20);
@@ -121,15 +101,56 @@ void SetOutputs()
 			osDelay(2*i);
 		}
 		Y19_OFF;
-		osDelay(500);
+		osDelay(500);*/
 	}
 	if (globData.sens.limit_platform_up){
-		Y01_OFF;
-		check_timer_en = 0;
+		globData.lift_status = LIFT_UP;
+		if (curr_lift_move == LIFT_UP)
+		{
+			Y01_OFF;
+			Y02_OFF;
+			check_timer_en = 0;
+			curr_lift_move = LIFT_NONE;
+			contrlMsg.pos_lift = LIFT_NONE;
+			globData.current_comm = MOVE_NONE;
+		}
 	}
-	else if (globData.sens.limit_platform_down){
-		Y02_OFF;
-		check_timer_en = 0;
+	if (globData.sens.limit_platform_down){
+		globData.lift_status = LIFT_DOWN;
+		if (curr_lift_move == LIFT_DOWN)
+		{
+			Y01_OFF;
+			Y02_OFF;
+			check_timer_en = 0;
+			curr_lift_move = LIFT_NONE;
+			contrlMsg.pos_lift = LIFT_NONE;
+			globData.current_comm = MOVE_NONE;
+		}
+	}
+	if (HAL_GetTick() - blink_timer > blink_interval)
+	{
+		static uint32_t x = 0;
+		x = !x;
+		if (!*(uint16_t*)&globData.error) {
+			Y09_OFF;
+			if (x){
+				Y08_ON;
+				blink_interval = 100;
+			}
+			else {
+				Y08_OFF;
+				blink_interval = 800;
+			}
+		}
+		else
+		{
+			Y08_OFF;
+			if (x) Y09_ON;
+			else Y09_OFF;
+			blink_interval-= 10;
+			if (blink_interval < 10) blink_interval = 300;
+		}
+		blink_timer = HAL_GetTick();
 	}
 }
 
