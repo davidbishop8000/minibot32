@@ -33,6 +33,11 @@ void StartCanDriversTask(void *argument)
 	driversInit();
 	uint32_t err_check_timer = 0;
 	enum MOVE_COMM command;
+	int32_t rack_stateX = 0;
+	int32_t x_pos_dir = 0;
+	int32_t rack_stateY = 0;
+	int32_t y_pos_dir = 0;
+
 	for(;;)
 	{
 		HAL_IWDG_Refresh(&hiwdg);
@@ -47,23 +52,132 @@ void StartCanDriversTask(void *argument)
 		command = (MOVE_COMM)globData.current_comm;
 		if (command == MOVE_POS_X)
 		{
-			driverX1.setPos(contrlMsg.pos_x);
-			if (driverX1.getSpeed() == 0)
+			if (RACK_SENS_X == 0)
 			{
-				driverX2.stop();
-				globData.current_comm = MOVE_NONE;
+				driverX1.setPos(contrlMsg.pos_x);
+				if (driverX1.getSpeed() == 0)
+				{
+					driverX2.stop();
+					globData.current_comm = MOVE_NONE;
+				}
+				else
+				{
+					driverX2.setSpeed(-driverX1.getSpeed());
+				}
 			}
 			else
 			{
-				driverX2.setSpeed(-driverX1.getSpeed());
+				if (rack_stateX == 0)
+				{
+					x_pos_dir = driverX1.getPos();
+					rack_stateX++;
+				}
+				else if (rack_stateX == 1)
+				{
+					driverX1.setPos(contrlMsg.pos_x);
+					if (driverX1.getSpeed() == 0)
+					{
+						driverX2.stop();
+						rack_stateX++;
+					}
+					else
+					{
+						driverX2.setSpeed(-driverX1.getSpeed());
+					}
+				}
+				else if(rack_stateX == 2)
+				{
+					if (globData.sens.sw_rackX)
+					{
+						globData.current_comm = MOVE_NONE;
+						rack_stateX = 0;
+					}
+					else rack_stateX++;
+				}
+				else if(rack_stateX == 3)
+				{
+					if ((driverX1.getPos() - x_pos_dir) > 0)
+					{
+						driverX1.setSpeed(LK_MIN_SPEED);
+						driverX2.setSpeed(-LK_MIN_SPEED);
+					}
+					else
+					{
+						driverX1.setSpeed(-LK_MIN_SPEED);
+						driverX2.setSpeed(LK_MIN_SPEED);
+					}
+					x_pos_dir = driverX1.getPos();
+					rack_stateX++;
+				}
+				else if(rack_stateX == 4)
+				{
+					int32_t abs_x_dist = x_pos_dir - driverX1.getPos();
+					if (abs_x_dist < 0) {abs_x_dist = -abs_x_dist;}
+					if (globData.sens.sw_rackX || (abs_x_dist > POS_X_RACK_DIST))
+					{
+						globData.current_comm = MOVE_NONE;
+						rack_stateX = 0;
+					}
+				}
 			}
 		}
 		else if (command == MOVE_POS_Y)
 		{
-			driverY1.setPos(contrlMsg.pos_y);
-			if (driverY1.getSpeed() == 0)
+			if (RACK_SENS_Y == 0)
 			{
-				globData.current_comm = MOVE_NONE;
+				driverY1.setPos(contrlMsg.pos_y);
+				if (driverY1.getSpeed() == 0)
+				{
+					globData.current_comm = MOVE_NONE;
+				}
+			}
+			else
+			{
+				if (rack_stateY == 0)
+				{
+					y_pos_dir = driverY1.getPos();
+					rack_stateY++;
+				}
+				else if (rack_stateY == 1)
+				{
+					driverY1.setPos(contrlMsg.pos_y);
+					if (driverY1.getSpeed() == 0)
+					{
+						rack_stateY++;
+					}
+				}
+				else if(rack_stateY == 2)
+				{
+					if (globData.sens.sw_rackY)
+					{
+						globData.current_comm = MOVE_NONE;
+						rack_stateY = 0;
+					}
+					else rack_stateY++;
+				}
+				else if(rack_stateY == 3)
+				{
+					if ((driverY1.getPos() - y_pos_dir) > 0)
+					{
+						driverY1.setSpeed(LK_MIN_SPEED);
+					}
+					else
+					{
+						driverY1.setSpeed(-LK_MIN_SPEED);
+					}
+					y_pos_dir = driverY1.getPos();
+					rack_stateY++;
+				}
+				else if(rack_stateY == 4)
+				{
+					int32_t abs_y_dist = y_pos_dir - driverY1.getPos();
+					if (abs_y_dist < 0) {abs_y_dist = -abs_y_dist;}
+					if (globData.sens.sw_rackY || (abs_y_dist > POS_Y_RACK_DIST))
+					{
+						globData.current_comm = MOVE_NONE;
+						rack_stateY = 0;
+					}
+				}
 			}
 		}
 		else if (command == MOVE_POS_FORK)
@@ -95,11 +209,11 @@ void StartCanDriversTask(void *argument)
 			{
 				if (globData.action_comm == ACTION_GET_BOX_L || globData.action_comm == ACTION_PUT_BOX_L)
 				{
-					driverX1.setPos(100000);
+					driverX1.setPos(FORK_LIMIT_POS);
 				}
 				if (globData.action_comm == ACTION_GET_BOX_R || globData.action_comm == ACTION_PUT_BOX_R)
 				{
-					driverX1.setPos(-100000);
+					driverX1.setPos(-FORK_LIMIT_POS);
 				}
 				if (driverX1.getSpeed() == 0)
 				{
@@ -135,6 +249,8 @@ void StartCanDriversTask(void *argument)
 		}
 		else
 		{
+			x_pos_dir = 0;
+			y_pos_dir = 0;
 			driverX1.readError();
 			osDelay(2);
 			driverX2.readError();

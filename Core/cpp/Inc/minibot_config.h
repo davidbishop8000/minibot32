@@ -43,8 +43,10 @@ extern "C"
 
 #define DRIVERS_QUANT 4
 
-#define POS_X_TOLERANCE 100
+#define POS_X_TOLERANCE 100 //допуск позиции X, в режиме поиска стойки с какого расстояния начинать искать стойку
 #define POS_Y_TOLERANCE 100
+#define POS_X_RACK_DIST 10000 //на какое макс расстоянии искать стойку по X
+#define POS_Y_RACK_DIST 10000
 #define POS_FORK_TOLERANCE 50
 #define LK_MAX_SPEED 100000
 #define LK_MIN_SPEED 20000
@@ -52,10 +54,14 @@ extern "C"
 #define KEYA_MIN_SPEED 500
 #define FORK_MAX_SPEED 3000 //6000
 #define FORK_MIN_SPEED 1500
+#define FORK_LIMIT_POS 100000 //расстояние выдвижения вилл
 #define X_WHEEL_RATIO 1
 #define Y_WHEEL_RATIO 1
 
-#define SERVO_ANGLE_CLOSE 90
+#define RACK_SENS_X 0 //поиск стойки по X
+#define RACK_SENS_Y 0 //поиск стойки по Y
+
+#define SERVO_ANGLE_CLOSE 90 //заданный угол сервоприводов при закрытых упорах
 
 #define FLASH_INIT 0x44
 
@@ -177,8 +183,8 @@ typedef struct {
 	unsigned char limit_servo_close		:1;
 	unsigned char limit_fork_center		:1;
 	unsigned char sw_box				:1;
-	unsigned char lim2					:1;
-	unsigned char lim1					:1;
+	unsigned char sw_rackX				:1;
+	unsigned char sw_rackY				:1;
 	unsigned char lim0					:1;
 	unsigned char r0					:1;
 	unsigned char r1					:1;
@@ -221,6 +227,7 @@ typedef struct {
 	int32_t lift_status;
 	uint32_t comm_count;
 	uint8_t capacity;
+	uint8_t rack_sens;
 } GlobDataTypeDef;
 
 enum MSG_ID {
