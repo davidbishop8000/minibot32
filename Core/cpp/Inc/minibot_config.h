@@ -45,8 +45,12 @@ extern "C"
 
 #define POS_X_TOLERANCE 100 //допуск позиции X, в режиме поиска стойки с какого расстояния начинать искать стойку
 #define POS_Y_TOLERANCE 100
+
+#define RACK_SENS_X 0 //поиск стойки по X
+#define RACK_SENS_Y 0 //поиск стойки по Y
 #define POS_X_RACK_DIST 10000 //на какое макс расстоянии искать стойку по X
 #define POS_Y_RACK_DIST 10000
+
 #define POS_FORK_TOLERANCE 50
 #define LK_MAX_SPEED 100000
 #define LK_MIN_SPEED 20000
@@ -57,9 +61,6 @@ extern "C"
 #define FORK_LIMIT_POS 100000 //расстояние выдвижения вилл
 #define X_WHEEL_RATIO 1
 #define Y_WHEEL_RATIO 1
-
-#define RACK_SENS_X 0 //поиск стойки по X
-#define RACK_SENS_Y 0 //поиск стойки по Y
 
 #define SERVO_ANGLE_CLOSE 90 //заданный угол сервоприводов при закрытых упорах
 

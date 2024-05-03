@@ -294,6 +294,7 @@ void StartCanDriversTask(void *argument)
 				{
 					driverFork.stop();
 					globData.current_comm = MOVE_NONE;
+					fork_home_state = 0;
 				}
 			}
 		}
