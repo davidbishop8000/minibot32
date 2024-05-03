@@ -37,6 +37,7 @@ void StartCanDriversTask(void *argument)
 	int32_t x_pos_dir = 0;
 	int32_t rack_stateY = 0;
 	int32_t y_pos_dir = 0;
+	int32_t fork_home_state = 0;
 
 	for(;;)
 	{
@@ -247,10 +248,60 @@ void StartCanDriversTask(void *argument)
 				}
 			}
 		}
+		else if (command == MOVE_HOME_X)
+		{
+			driverX1.setSpeed(-LK_MIN_SPEED);
+			if (driverX1.getSpeed() == 0)
+			{
+				driverX2.stop();
+				globData.current_comm = MOVE_NONE;
+			}
+			else
+			{
+				driverX2.setSpeed(driverX1.getSpeed());
+			}
+			if(globData.sens.limit_sw1)
+			{
+				driverX1.stop();
+				driverX2.stop();
+				globData.current_comm = MOVE_NONE;
+			}
+		}
+		else if (command == MOVE_HOME_Y)
+		{
+			driverY1.setSpeed(-KEYA_MIN_SPEED);
+			if(globData.sens.limit_sw2)
+			{
+				driverY1.stop();
+				globData.current_comm = MOVE_NONE;
+			}
+		}
+		else if (command == MOVE_HOME_F)
+		{
+			if (fork_home_state == 0)
+			{
+				driverFork.setSpeed(FORK_MIN_SPEED);
+				if (globData.sens.limit_fork_forw)
+				{
+					driverFork.stop();
+				}
+				fork_home_state++;
+			}
+			else if (fork_home_state == 1)
+			{
+				driverFork.setSpeed(-FORK_MIN_SPEED);
+				if (globData.sens.limit_fork_center)
+				{
+					driverFork.stop();
+					globData.current_comm = MOVE_NONE;
+				}
+			}
+		}
 		else
 		{
 			x_pos_dir = 0;
 			y_pos_dir = 0;
+			fork_home_state = 0;
 			driverX1.readError();
 			osDelay(2);
 			driverX2.readError();
@@ -273,6 +324,9 @@ void StartCanDriversTask(void *argument)
 		}
 		if (command == MOVE_RESET)
 		{
+			x_pos_dir = 0;
+			y_pos_dir = 0;
+			fork_home_state = 0;
 			driversStop();
 			driversInit();
 			globData.current_comm = MOVE_NONE;

@@ -34,10 +34,10 @@ void StartInputsTask(void *argument)
 		IN_X06 ? (globData.sens.limit_servo_open= 0) : (globData.sens.limit_servo_open = 1);
 		IN_X07 ? (globData.sens.limit_servo_close = 0) : (globData.sens.limit_servo_close = 1);
 		IN_X08 ? (globData.sens.limit_fork_center = 0) : (globData.sens.limit_fork_center = 1);
-		IN_X09 ? (globData.sens.sw_box = 0) : (globData.sens.sw_box = 1);
-		IN_X10 ? (globData.sens.sw_rackX = 0) : (globData.sens.sw_rackX = 1);
-		IN_X12 ? (globData.sens.sw_rackY = 0) : (globData.sens.sw_rackY = 1);
-		IN_X13 ? (globData.sens.r0 = 0) : (globData.sens.r0 = 1);
+		IN_X09 ? (globData.sens.limit_fork_forw = 0) : (globData.sens.limit_fork_forw = 1);
+		IN_X10 ? (globData.sens.sw_box = 0) : (globData.sens.sw_box = 1);
+		IN_X12 ? (globData.sens.sw_rackX = 0) : (globData.sens.sw_rackX = 1);
+		IN_X13 ? (globData.sens.sw_rackY = 0) : (globData.sens.sw_rackY = 1);
 		IN_X14 ? (globData.sens.r1 = 0) : (globData.sens.r1 = 1);
 		IN_X15 ? (globData.sens.r2 = 0) : (globData.sens.r2 = 1);
 		IN_X16 ? (globData.sens.r3 = 0) : (globData.sens.r3 = 1);

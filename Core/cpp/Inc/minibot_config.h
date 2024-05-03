@@ -182,11 +182,11 @@ typedef struct {
 	unsigned char limit_servo_open		:1;
 	unsigned char limit_servo_close		:1;
 	unsigned char limit_fork_center		:1;
+	unsigned char limit_fork_forw		:1;
 	unsigned char sw_box				:1;
 	unsigned char sw_rackX				:1;
 	unsigned char sw_rackY				:1;
 	unsigned char lim0					:1;
-	unsigned char r0					:1;
 	unsigned char r1					:1;
 	unsigned char r2					:1;
 	unsigned char r3					:1;
@@ -248,6 +248,9 @@ enum MOVE_COMM
 	MOVE_EMERGY_STOP,
 	MOVE_RESET,
 	MOVE_ACTION,
+	MOVE_HOME_X,
+	MOVE_HOME_Y,
+	MOVE_HOME_F,
 	MOVE_ERROR,
 	MOVE_MAX,
 };
