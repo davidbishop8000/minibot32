@@ -5,8 +5,8 @@
  *      Author: USER
  */
 
-#ifndef CPP_INC_TERMOPLAST_CONFIG_H_
-#define CPP_INC_TERMOPLAST_CONFIG_H_
+#ifndef CPP_INC_MINIBOT_CONFIG_H_
+#define CPP_INC_MINIBOT_CONFIG_H_
 
 #ifdef __cplusplus
 extern "C"
@@ -46,7 +46,7 @@ extern "C"
 #define POS_X_TOLERANCE 100 //допуск позиции X, в режиме поиска стойки с какого расстояния начинать искать стойку
 #define POS_Y_TOLERANCE 100
 
-#define RACK_SENS_X 0 //поиск стойки по X
+#define RACK_SENS_X 0 //поиск стойки(рельса) по X
 #define RACK_SENS_Y 0 //поиск стойки по Y
 #define POS_X_RACK_DIST 10000 //на какое макс расстоянии искать стойку по X
 #define POS_Y_RACK_DIST 10000
@@ -59,8 +59,11 @@ extern "C"
 #define FORK_MAX_SPEED 3000 //6000
 #define FORK_MIN_SPEED 1500
 #define FORK_LIMIT_POS 100000 //расстояние выдвижения вилл
-#define X_WHEEL_RATIO 1
+
+//if ratio float - all value need convert to float
+#define X_WHEEL_RATIO 1 //импульсов на 1мм
 #define Y_WHEEL_RATIO 1
+#define FORK_RATIO 1
 
 #define SERVO_ANGLE_CLOSE 90 //заданный угол сервоприводов при закрытых упорах
 
@@ -353,4 +356,4 @@ enum BEEPER {
 }
 #endif
 
-#endif /* CPP_INC_TERMOPLAST_CONFIG_H_ */
+#endif /* CPP_INC_MINIBOT_CONFIG_H_ */

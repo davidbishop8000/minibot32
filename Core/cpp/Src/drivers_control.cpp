@@ -48,8 +48,8 @@ void StartCanDriversTask(void *argument)
 		osDelay(2);
 		driverY1.readEnc();
 		osDelay(2);
-		driverY1.setEnc(globData.enc_Y1);
-		driverFork.setEnc(globData.enc_fork);
+		driverY1.setEnc(globData.enc_Y1 * Y_WHEEL_RATIO); //if ratio float - all value need convert to float
+		driverFork.setEnc(globData.enc_fork * FORK_RATIO); //if ratio float - all value need convert to float
 		command = (MOVE_COMM)globData.current_comm;
 		if (command == MOVE_POS_X)
 		{
@@ -210,13 +210,13 @@ void StartCanDriversTask(void *argument)
 			{
 				if (globData.action_comm == ACTION_GET_BOX_L || globData.action_comm == ACTION_PUT_BOX_L)
 				{
-					driverX1.setPos(FORK_LIMIT_POS);
+					driverFork.setPos(FORK_LIMIT_POS);
 				}
 				if (globData.action_comm == ACTION_GET_BOX_R || globData.action_comm == ACTION_PUT_BOX_R)
 				{
-					driverX1.setPos(-FORK_LIMIT_POS);
+					driverFork.setPos(-FORK_LIMIT_POS);
 				}
-				if (driverX1.getSpeed() == 0)
+				if (driverFork.getSpeed() == 0)
 				{
 					act_state++;
 				}
@@ -239,8 +239,8 @@ void StartCanDriversTask(void *argument)
 			}
 			else if (act_state == 3)
 			{
-				driverX1.setPos(0);
-				if (driverX1.getSpeed() == 0)
+				driverFork.setPos(0);
+				if (driverFork.getSpeed() == 0)
 				{
 					act_state = 0;
 					globData.current_comm = MOVE_NONE;
@@ -250,7 +250,7 @@ void StartCanDriversTask(void *argument)
 		}
 		else if (command == MOVE_HOME_X)
 		{
-			driverX1.setSpeed(-LK_MIN_SPEED);
+			if (!globData.sens.limit_sw1) driverX1.setSpeed(-LK_MIN_SPEED);
 			if (driverX1.getSpeed() == 0)
 			{
 				driverX2.stop();
@@ -260,7 +260,7 @@ void StartCanDriversTask(void *argument)
 			{
 				driverX2.setSpeed(driverX1.getSpeed());
 			}
-			if(globData.sens.limit_sw1)
+			if (globData.sens.limit_sw1)
 			{
 				driverX1.stop();
 				driverX2.stop();
@@ -269,8 +269,8 @@ void StartCanDriversTask(void *argument)
 		}
 		else if (command == MOVE_HOME_Y)
 		{
-			driverY1.setSpeed(-KEYA_MIN_SPEED);
-			if(globData.sens.limit_sw2)
+			if (!globData.sens.limit_sw2) driverY1.setSpeed(-KEYA_MIN_SPEED);
+			if (globData.sens.limit_sw2)
 			{
 				driverY1.stop();
 				globData.current_comm = MOVE_NONE;
@@ -280,6 +280,17 @@ void StartCanDriversTask(void *argument)
 		{
 			if (fork_home_state == 0)
 			{
+				if (globData.sens.limit_fork_center)
+				{
+					globData.current_comm = MOVE_NONE;
+				}
+				else
+				{
+					fork_home_state++;
+				}
+			}
+			else if (fork_home_state == 1)
+			{
 				driverFork.setSpeed(FORK_MIN_SPEED);
 				if (globData.sens.limit_fork_forw)
 				{
@@ -287,7 +298,7 @@ void StartCanDriversTask(void *argument)
 				}
 				fork_home_state++;
 			}
-			else if (fork_home_state == 1)
+			else if (fork_home_state == 2)
 			{
 				driverFork.setSpeed(-FORK_MIN_SPEED);
 				if (globData.sens.limit_fork_center)

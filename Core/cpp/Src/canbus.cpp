@@ -54,7 +54,7 @@ uint8_t CanMsgRead(CanDataRecvTypeDef *canDataRecv) {
 			if (RxHeader.StdId == mdrivers[i]->getId()) {
 				if (RxData[0] == 0x9C)
 				{
-					mdrivers[i]->setEnc(*(uint16_t*) &RxData[6]);
+					mdrivers[i]->setEnc((*(uint16_t*) &RxData[6]) * X_WHEEL_RATIO); //if ratio float - all value need convert to float
 					mdrivers[i]->setTemp(RxData[1]);
 					mdrivers[i]->error_count = 0;
 				}

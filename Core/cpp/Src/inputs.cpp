@@ -23,9 +23,7 @@ void StartInputsTask(void *argument)
 		static int32_t currCounter1 = 0;
 		currCounter0 = __HAL_TIM_GET_COUNTER(&htim4);
 		currCounter1 = __HAL_TIM_GET_COUNTER(&htim2);
-		static int32_t enc_Y1 = 0;
-		enc_Y1 = unwrap_encoder(currCounter0, &enc_prev0);
-		globData.enc_Y1 = enc_Y1*Y_WHEEL_RATIO;
+		globData.enc_Y1 = unwrap_encoder(currCounter0, &enc_prev0);
 		globData.enc_fork = unwrap_encoder(currCounter1, &enc_prev1);
 		IN_X02 ? (globData.sens.limit_sw1 = 0) : (globData.sens.limit_sw1 = 1);
 		IN_X03 ? (globData.sens.limit_sw2 = 0) : (globData.sens.limit_sw2 = 1);
